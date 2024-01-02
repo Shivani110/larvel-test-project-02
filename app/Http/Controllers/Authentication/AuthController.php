@@ -25,15 +25,19 @@ class AuthController extends Controller
             if(Auth::attempt(['email' => $request->email,'password' => $request->password])){
                 return redirect('/admin-dashboard/index');
             }else{
-                return redirect('/admin-login')->with('error',"The credentials doesn't matched");
+                return redirect('/login')->with('error',"The credentials doesn't matched");
             }
         }else{
-            return redirect('/admin-login')->with('error','Google recaptcha is not valid!');
+            return redirect('/login')->with('error','Google recaptcha is not valid!');
         }
     }
 
     public function logout(){
         Auth::logout();
-        return redirect('/admin-login');
+        return redirect('/login');
+    }
+
+    public function authlogin(Request $request){
+        return $request->all();
     }
 }

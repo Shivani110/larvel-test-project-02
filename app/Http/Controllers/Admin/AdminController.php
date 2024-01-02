@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Genre;
 use App\Models\Country;
 use App\Models\ArticleType;
+use App\Models\Publications;
 
 class AdminController extends Controller
 {
@@ -139,5 +140,123 @@ class AdminController extends Controller
         $id = $request->id;
         $article = ArticleType::where('id','=',$id)->delete();
         return response()->json($article);
+    }
+
+    public function publication(){
+        $genres = Genre::all();
+        $article = ArticleType::all();
+        $country = Country::all();
+        return view('admin.publications',compact('genres','article','country'));
+    }
+
+    public function createPublications(Request $request){
+        $request->validate([
+            'title' => 'required|unique:publications,title',
+            'url' => 'required',
+            'price' => 'required',
+            'domain' => 'required',
+            'tat' => 'required',
+            'image' => 'required',
+        ]);
+
+        if($request->hasFile('image')) {
+            $image = $request->file('image');
+            $extension = $image->getClientOriginalExtension();
+            $imageName = 'pro' . rand(0, 1000) . time() . '.' . $extension;
+            $image->move(public_path('image'), $imageName);
+        }
+
+        if($request->genres != null){
+            $genre = json_encode($request->genres);
+        }
+
+        if($request->article != null){
+            $article = json_encode($request->article);
+        }
+
+        
+        if($request->country != null){
+            $country = $request->country;
+        }
+        $publications = new Publications;
+        $publications->title = $request->title;
+        $publications->url = $request->url;
+        $publications->price = $request->price;
+        $publications->domain_authority = $request->domain;
+        $publications->turn_around_time = $request->tat;
+        $publications->genres = $genre;
+        $publications->article_type = $article;
+        $publications->country = $country;
+        $publications->image = $imageName;
+        $publications->save();
+
+        return redirect('/admin-dashboard/insertpublication')->with('success','Production inserted successfully..');
+    }
+
+    public function publicationlist(){
+        $publication = Publications::all();
+        return view('admin.publicationlist',compact('publication'));
+    }
+
+    public function editpublications($id){
+        $publication = Publications::where('id','=',$id)->first();
+        $genres = Genre::all();
+        $article = ArticleType::all();
+        $country = Country::all();
+
+        return view('admin.publications',compact('publication','genres','article','country'));
+    }
+
+    public function updatepublications(Request $request){
+        $id = $request->id;
+        $publication = Publications::where('id','=',$id)->first();
+
+        if($request->hasFile('image')){
+            $image = $request->file('image');
+            $extension = $image->getClientOriginalExtension();
+            $imageName = 'pro' . rand(0, 1000) . time() . '.' .$extension;
+            $image->move(public_path('image'),imageName);
+        }else{
+            $imageName = $publication->image;
+        }
+
+        if($request->genres){
+            $genres = json_encode($request->genres);
+        }else{
+            $genres = $publication->genres;
+        }
+
+        if($request->article){
+            $article = json_encode($request->article);
+        }else{
+            $article = $publication->article;
+        }
+
+        if($request->country){
+            $country = $request->country;
+        }else{
+            $country = $publication->country;
+        }
+
+        $publications = Publications::where('id','=',$id)->first();
+        $publications->title = $request->title;
+        $publications->url = $request->url;
+        $publications->price = $request->price;
+        $publications->domain_authority = $request->domain;
+        $publications->turn_around_time = $request->tat;
+        $publications->genres = $genres;
+        $publications->article_type = $article;
+        $publications->country = $country;
+        $publications->image = $imageName;
+        $publications->update();
+
+        return redirect('/admin-dashboard/insertpublication/'.$publications->id)->with("success","Publications updated successfully..");
+    }
+
+    public function deletePublications(Request $request){
+        $id = $request->id;
+        $publication = Publications::where('id','=',$id)->delete();
+
+        return response()->json($publication);
     }
 }

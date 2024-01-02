@@ -1,0 +1,246 @@
+@media only screen and (min-width: 1600px) {
+    .container {
+        max-width: 1470px;
+    }
+}
+
+@media only screen and (max-width: 1599px) {
+    body {
+        font-size: 16px;
+    }
+    header.header_wrapper {
+        padding: 30px 0 20px;
+    }
+    .login_content {
+        border-radius: 20px;
+        padding: 40px;
+    }
+    .publication_content .leftside_rang {
+        padding-right: 30px;
+    }
+    .login_content h2 {
+        margin: 20px 0;
+    }
+    .login_content form .form-control {
+        padding: 16px;
+    }
+    .login_content form a.btn {
+        font-size: 18px;
+        padding: 12px 0;
+    }
+}
+
+@media only screen and (max-width: 1199px) {
+    .login_content {
+        padding: 50px;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .header_wrapper .logo_img img {
+        max-width: 250px;
+    }
+    .login_content h2 {
+        margin: 20px 0;
+    }
+    h2 {
+        font-size: 35px;
+        line-height: 1.2;
+    }
+    .login_content form .form-control {
+        line-height: 1.2;
+        padding: 16px;
+    }
+    .login_content form a.btn {
+        font-size: 17px;
+        line-height: 1.2;
+    }
+    .footer_wrapper .footer_content p {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+    .login_content {
+        padding: 30px;
+        max-width: 100%;
+    }
+    .login_content .login_img {
+        max-width: 130px;
+        margin: 0 auto;
+    }
+    .publication_content {
+        display: block;
+    }
+    .publication_content .leftside_rang {
+        width: 100%;
+        padding: 0;
+    }
+    .publication_content .rightside_publication {
+        width: 100%;
+        margin-top: 30px;
+    }
+    .ques_btn a.btn {
+        font-size: 16px;
+        line-height: 1.2;
+        padding: 14px 40px;
+    }
+    .p-100 {
+        padding: 70px 0;
+    }
+    .business_wrapper .business_grid {
+        gap: 15px;
+    }
+    .leftside_rang form hr {
+        margin: 35px 0;
+    }
+    .press_grid .press_wreap {
+        padding: 20px;
+    }
+    .press_grid .press_wreap p {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+    .publication_content .leftside_rang form .form-control {
+        padding: 12px;
+    }
+    .leftside_rang form .chosen-container-multi .chosen-choices, .asc_wrapper .chosen-container-single .chosen-single {
+        padding: 14px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .publication_wrapper .pricing_content {
+        display: block;
+    }
+    .publication_wrapper .pricing_text {
+        padding-right: 0;
+    }
+    .business_wrapper .business_grid {
+        gap: 10px;
+    }
+    h2 {
+        font-size: 30px;
+    }
+    body {
+        font-size: 14px;
+    }
+    .ques_btn a.btn {
+        font-size: 14px;
+        padding: 13px 30px;
+    }
+    .business_content .business_wreap h4.bundle_text {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+    .publication_wrapper .tab_btn ul li a {
+        padding: 10px 8px;
+        font-size: 13px;
+        line-height: 1.2;
+    }
+    .header_content .log_out_bnt a.btn {
+        font-size: 18px;
+        line-height: 1.2;
+    }
+    .header_content .log_out_bnt a.btn i {
+        font-size: 25px;
+    }
+    .publication_content .overview_company {
+        overflow-x: scroll;
+    }
+    .rightside_publication table tbody tr td .cpy_logo {
+        width: 150px;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    body {
+        font-size: 14px;
+    }
+    header.header_wrapper {
+        padding: 20px 0;
+    }
+    .header_wrapper .logo_img img {
+        max-width: 200px;
+    }
+    .login_content {
+        padding: 25px;
+    }
+    .login_content .login_img {
+        max-width: 120px;
+    }
+    h2 {
+        font-size: 30px;
+    }
+    .login_content form .form-control {
+        padding: 14px;
+    }
+    .login_content form a.btn {
+        font-size: 16px;
+    }
+    .p-100 {
+        padding: 50px 0;
+    }
+    .business_wrapper .business_grid {
+        gap: 15px;
+    }
+    .press_wrapper .press_list,
+    .business_wrapper .business_grid {
+        grid-template-columns: repeat(1,1fr);
+    }
+    .press_grid .press_wreap p {
+        font-size: 14px;
+    }
+    .press_grid .press_wreap .press_price span {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+    h2 {
+        font-size: 28px;
+    }
+    h3 {
+        font-size: 20px;
+        line-height: 1.2;
+    }
+    .rightside_publication .publications_show span {
+        font-size: 13px;
+        line-height: 1.2;
+    }
+    .leftside_rang form h3, .leftside_rang form label {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+    .header_content .log_out_bnt a.btn {
+        font-size: 15px;
+    }
+    .header_content .log_out_bnt a.btn i {
+        font-size: 20px;
+        padding-right: 0;
+    }
+    .publication_wrapper .tab_btn ul li {
+        margin: 5px;
+    }
+    .leftside_rang form .chosen-container-multi .chosen-choices, .asc_wrapper .chosen-container-single .chosen-single {
+        padding: 10px;
+    }
+    .publication_content .leftside_rang form .form-control {
+        padding: 10px;
+    }
+    .rightside_publication table tbody tr td .cpy_logo {
+        width: 130px;
+    }
+    #slider-range .noUi-handle {
+        width: 18px;
+        height: 18px;
+    }
+    .noUi-horizontal {
+        height: 6px;
+    }
+    #slider-range .noUi-handle.noUi-handle-upper {
+        left: -18px;
+    }
+    .leftside_rang form hr {
+        margin: 25px 0;
+    }
+    .publication_wrapper .tab_btn ul {
+        margin-bottom: 20px;
+    }
+}

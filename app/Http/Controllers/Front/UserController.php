@@ -10,4 +10,12 @@ class UserController extends Controller
     public function login(){
         return view('front.login');
     }
+
+    public function prpartnerlogin(){
+        return view('front.prpartnerlogin');
+    }
+
+    public function allpublications(){
+        return view('front.all-publication');
+    }
 }

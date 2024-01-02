@@ -20,9 +20,13 @@ use App\Http\Controllers\Admin\AdminController;
 //     return view('welcome');
 // });
 
-Route::get('/admin-login',[UserController::class,'login']);
+Route::get('/',[UserController::class,'prpartnerlogin']);
+Route::get('/all-publication',[UserController::class,'allpublications']);
+
+Route::get('/login',[UserController::class,'login']);
 Route::post('/admin-signin',[AuthController::class,'adminlogin']);
 Route::get('/logout',[AuthController::class,'logout']);
+Route::post('/signin',[AuthController::class,'authlogin']);
 
 Route::group(['middleware'=>['admin']],function(){
     Route::get('/admin-dashboard/index',[AdminController::class,'index']);
@@ -35,4 +39,10 @@ Route::group(['middleware'=>['admin']],function(){
     Route::get('/admin-dashboard/articletype',[AdminController::class,'article']);
     Route::post('/admin-dashboard/createarticle',[AdminController::class,'createArticle']);
     Route::post('/admin-dashboard/deletearticle',[AdminController::class,'deleteArticle']);
+    Route::get('/admin-dashboard/insertpublication',[AdminController::class,'publication']);
+    Route::post('/admin-dashboard/publications',[AdminController::class,'createPublications']);
+    Route::get('/admin-dashboard/publicationslist',[AdminController::class,'publicationlist']);
+    Route::get('/admin-dashboard/insertpublication/{id}',[AdminController::class,'editpublications']);
+    Route::post('/admin-dashboard/updatepublication',[AdminController::class,'updatepublications']);
+    Route::post('/admin-dashboard/deletepublication',[AdminController::class,'deletePublications']);
 });

@@ -12,8 +12,8 @@
     <!-- Page Title  -->
     <title>Admin Dashboard</title>
     <!-- StyleSheets  -->
-    <link rel="stylesheet" href="./assets/css/dashlite.css?ver=3.1.2">
-    <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=3.1.2">
+    <link rel="stylesheet" href="{{ asset('/assets/css/dashlite.css?ver=3.1.2') }}">
+    <link id="skin-default" rel="stylesheet" href="{{ asset('/assets/css/theme.css?ver=3.1.2') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.min.js" ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
@@ -32,8 +32,7 @@
                     </div>
                     <div class="nk-sidebar-brand">
                         <a href="html/index.html" class="logo-link nk-sidebar-logo">
-                            <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
-                            <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                            <h3 class="logo-light text-light">PR Partner</h3>
                         </a>
                     </div>
                 </div><!-- .nk-sidebar-element -->
@@ -74,6 +73,20 @@
                                     <ul class="nk-menu-sub">
                                         <li class="nk-menu-item">
                                             <a href="{{ url('admin-dashboard/articletype') }}" class="nk-menu-link"><span class="nk-menu-text">ArticleType List</span></a>
+                                        </li>
+                                    </ul><!-- .nk-menu-sub -->
+                                </li>
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-tile-thumb"></em></span>
+                                        <span class="nk-menu-text">Publications</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/insertpublication') }}" class="nk-menu-link"><span class="nk-menu-text">Insert Publications</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/publicationslist') }}" class="nk-menu-link"><span class="nk-menu-text">Publications List</span></a>
                                         </li>
                                     </ul><!-- .nk-menu-sub -->
                                 </li>
@@ -214,15 +227,7 @@
                 <div class="nk-footer">
                     <div class="container-fluid">
                         <div class="nk-footer-wrap">
-                            <div class="nk-footer-copyright"> &copy; 2024 PRPartner</div>
-                            <div class="nk-footer-links">
-                                <ul class="nav nav-sm">
-                                    
-                                    <li class="nav-item">
-                                        <a data-bs-toggle="modal" href="#region" class="nav-link"><em class="icon ni ni-globe"></em><span class="ms-1">Select Region</span></a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <div class="nk-footer-copyright">© 2023 PR Partners International</div>
                         </div>
                     </div>
                 </div>
