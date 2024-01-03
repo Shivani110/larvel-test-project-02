@@ -15,7 +15,4 @@ class UserController extends Controller
         return view('front.prpartnerlogin');
     }
 
-    public function allpublications(){
-        return view('front.all-publication');
-    }
 }

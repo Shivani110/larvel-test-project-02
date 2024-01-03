@@ -48,7 +48,7 @@
                                     <strong>{{ $message }}</strong>
                                 </div>
                                 @elseif ($message = Session::get('error'))
-                                <div class="alert alert-error alert-block">
+                                <div class="alert alert-danger alert-block">
                                     <strong>{{ $message }}</strong>
                                 </div>
                                 @endif

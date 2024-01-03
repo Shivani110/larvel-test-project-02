@@ -37,10 +37,23 @@
                             <img src="{{ asset('/pr/img/login.png ') }}" class="img-fluid" alt="">
                         </div>
                         <h2>Protected Page</h2>
+                        @if ($message = Session::get('success'))
+                            <div class="text text-left text-success">
+                                <p>{{ $message }}</p>
+                            </div>
+                        @elseif ($message = Session::get('error'))
+                            <div class="text text-left text-danger">
+                                <p>{{ $message }}</p>
+                            </div>
+                        @endif
                         <form action="{{ url('/signin') }}" method="POST"> 
                             @csrf          
                             <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password">
-                            <div class="text text-left text-danger"> </div>
+                            <div class="text text-left text-danger"> 
+                                @error('password')
+                                {{ $message }}
+                                @enderror
+                            </div>
                             <button class="btn" role="button">Submit</button>
                         </form>
                     </div>

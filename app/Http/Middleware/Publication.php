@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Auth;
 
-class Admin
+class Publication
 {
     /**
      * Handle an incoming request.
@@ -17,13 +17,14 @@ class Admin
     public function handle(Request $request, Closure $next): Response
     {
         if(Auth::user() != null){
-            if(Auth::user()->role == '1'){
+            if(Auth::user()->role == '2'){
                 return $next($request);
             }else{
-                return redirect('/login');
+                return redirect('/');
             }
         }else{
-            return redirect('/login');
+            return redirect('/');
         }
+       
     }
 }

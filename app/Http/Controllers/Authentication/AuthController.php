@@ -23,7 +23,14 @@ class AuthController extends Controller
 
         if($response['success'] == '1'){
             if(Auth::attempt(['email' => $request->email,'password' => $request->password])){
-                return redirect('/admin-dashboard/index');
+                $role = Auth::user()->role;
+                if($role == '1'){
+                    return redirect('/admin-dashboard/index');
+                }else{
+                    Auth::logout();
+                    return redirect('/login')->with('error',"Login failed");
+                }
+                
             }else{
                 return redirect('/login')->with('error',"The credentials doesn't matched");
             }
@@ -38,6 +45,26 @@ class AuthController extends Controller
     }
 
     public function authlogin(Request $request){
-        return $request->all();
+        $request->validate([
+            'password' => 'required',
+        ]);
+
+        $password = $request->password;
+        if(Auth::attempt(['email'=> 'prpartner@gmail.com','password'=> $password])){
+            $role = Auth::user()->role;
+            if($role == '2'){
+                return redirect('/publications');
+            }else{
+                Auth::logout();
+                return back()->with("error","Login failed !!");
+            }
+        }else{
+            return back()->with('error',"The credentials doesn't matched");
+        }
+    }
+
+    public function authlogout(){
+        Auth::logout();
+        return redirect('/');
     }
 }

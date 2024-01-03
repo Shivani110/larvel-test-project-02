@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\UserController;
 use App\Http\Controllers\Authentication\AuthController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\PublicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,12 +22,12 @@ use App\Http\Controllers\Admin\AdminController;
 // });
 
 Route::get('/',[UserController::class,'prpartnerlogin']);
-Route::get('/all-publication',[UserController::class,'allpublications']);
-
 Route::get('/login',[UserController::class,'login']);
+
 Route::post('/admin-signin',[AuthController::class,'adminlogin']);
 Route::get('/logout',[AuthController::class,'logout']);
 Route::post('/signin',[AuthController::class,'authlogin']);
+Route::get('/auth-logout',[AuthController::class,'authlogout']);
 
 Route::group(['middleware'=>['admin']],function(){
     Route::get('/admin-dashboard/index',[AdminController::class,'index']);
@@ -45,4 +46,13 @@ Route::group(['middleware'=>['admin']],function(){
     Route::get('/admin-dashboard/insertpublication/{id}',[AdminController::class,'editpublications']);
     Route::post('/admin-dashboard/updatepublication',[AdminController::class,'updatepublications']);
     Route::post('/admin-dashboard/deletepublication',[AdminController::class,'deletePublications']);
+    Route::get('/admin-dashboard/useraccess',[AdminController::class,'userAccess']);
+    Route::post('/admin-dashboard/access',[AdminController::class,'userLogin']);
+    Route::get('/admin-dashboard/fileupload',[AdminController::class,'fileupload']);
+    Route::post('/admin-dashboard/csvupload',[AdminController::class,'importfile']);
+    Route::get('/admin-dashboard/export',[AdminController::class,'export']);
+});
+
+Route::group(['middleware'=>['publication']],function(){
+    Route::get('/publications',[PublicationController::class,'allpublications']);
 });

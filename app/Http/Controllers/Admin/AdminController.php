@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Genre;
 use App\Models\Country;
 use App\Models\ArticleType;
 use App\Models\Publications;
+use App\Models\User;
+use Hash;
 
 class AdminController extends Controller
 {
@@ -258,5 +262,75 @@ class AdminController extends Controller
         $publication = Publications::where('id','=',$id)->delete();
 
         return response()->json($publication);
+    }
+
+    public function userAccess(){
+        return view('admin.useraccess');
+    }
+
+    public function userLogin(Request $request){
+        $request->validate([
+            'password' => 'required',
+            'confirm_password' => 'required'
+        ]);
+        $password = Hash::make($request->password);
+        $confirm = $request->confirm_password;
+
+        if($request->password == $confirm){
+            $user = User::where('email','=','prpartner@gmail.com')->first();
+
+            if($user != null){
+                $user->password = $password;
+                $user->update();
+
+                return back()->with('success','Changed Password');
+            }else{
+                $users = new User;
+                $users->name = 'prpartner';
+                $users->email = 'prpartner@gmail.com';
+                $users->password = $password;
+                $users->role = '2';
+                $users->save();
+
+                return back()->with('success','Saved Password');
+            }
+        }else{
+            return back()->with('error','The password confirmation not matched !!');
+        }
+    }
+
+    public function fileupload(){
+        return view('admin.uploadcsv');
+    }
+
+    public function importfile(Request $request){
+        $request->validate([
+            'csv' => 'required',
+        ]);
+
+        if($request->hasFile('csv')){
+            $file = $request->file('csv');
+            $filename = 'pricingsheet' .'.csv';
+            $file->move(public_path('files'), $filename);
+
+            $path = public_path('files/'.$filename);
+            $fileopen = fopen($path,"r");
+            $data = fgetcsv($fileopen);
+            $pricing = array();
+
+            while (($data = fgetcsv($fileopen))!== false) {
+               array_push($pricing,$data);
+            }
+            echo '<pre>';
+            print_r($pricing[0][5]);
+            
+            $array = explode(' ',$pricing[0][5] );
+            print_r($array);
+            
+            echo '</pre>';
+
+            fclose($fileopen);
+        }
+
     }
 }

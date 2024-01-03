@@ -90,6 +90,34 @@
                                         </li>
                                     </ul><!-- .nk-menu-sub -->
                                 </li>
+                                <li class="nk-menu-item has-sub">
+                                    <a href="" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-tile-thumb"></em></span>
+                                        <span class="nk-menu-text">User-Access</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/useraccess') }}" class="nk-menu-link"><span class="nk-menu-text">UserAccess</span></a>
+                                        </li>
+                                        <!-- <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/publicationslist') }}" class="nk-menu-link"><span class="nk-menu-text">Publications List</span></a>
+                                        </li> -->
+                                    </ul> <!-- .nk-menu-sub -->
+                                </li>
+                                <li class="nk-menu-item has-sub">
+                                    <a href="" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-tile-thumb"></em></span>
+                                        <span class="nk-menu-text">Csv Upload</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/fileupload') }}" class="nk-menu-link"><span class="nk-menu-text">Csv Upload</span></a>
+                                        </li>
+                                        <!-- <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/publicationslist') }}" class="nk-menu-link"><span class="nk-menu-text">Publications List</span></a>
+                                        </li> -->
+                                    </ul> <!-- .nk-menu-sub -->
+                                </li>
                             </ul>  
                         </div><!-- .nk-sidebar-menu -->
                     </div><!-- .nk-sidebar-content -->
