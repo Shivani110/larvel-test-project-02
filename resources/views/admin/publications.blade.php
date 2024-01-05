@@ -135,7 +135,7 @@
                         </div>
                         <div class="col-lg-7">
                             @if($publication->image ?? '')
-                            <img src="{{ asset('/image/'.$publication->image) }}">
+                            <img src="{{ $publication->image }}">
                             @endif
                             <div class="form-group">
                                 <div class="form-control-wrap">
@@ -161,13 +161,13 @@
                                     if($publication->genres ?? ''){
                                         $gen = json_decode($publication->genres); 
                                         if(in_array($data->id,$gen)){ ?>
-                                            <input type="checkbox" class="custom-control-input" name="genres[]" id="genres{{ $data->id ?? '' }}" value="{{ $data->id }}" checked>
+                                            <input type="checkbox" class="custom-control-input" name="genres[]" id="genres{{ $data->id ?? '' }}" value={{ $data->id }} checked>
                                  <?php  } ?>
-                                        <input type="checkbox" class="custom-control-input" name="genres[]" id="genres{{ $data->id ?? '' }}" value="{{ $data->id }}">
+                                        <input type="checkbox" class="custom-control-input" name="genres[]" id="genres{{ $data->id ?? '' }}" value={{ $data->id }}>
                                         <label class="custom-control-label" for="genres{{ $data->id ?? ''}}">{{ $data->genre_name }}</label> 
                                     <?php   
                                     }else{ ?>
-                                        <input type="checkbox" class="custom-control-input" name="genres[]" id="genres{{ $data->id ?? '' }}" value="{{ $data->id }}">
+                                        <input type="checkbox" class="custom-control-input" name="genres[]" id="genres{{ $data->id ?? '' }}" value={{ $data->id }}>
                                         <label class="custom-control-label" for="genres{{ $data->id ?? ''}}">{{ $data->genre_name }}</label> 
                                 <?php
                                     }
@@ -192,16 +192,17 @@
                             <div class="custom-control custom-control-sm custom-radio">
                                 <?php 
                                     if($publication->article_type ?? ''){ 
-                                        $art = json_decode($publication->article_type);
-                                        if(in_array($a_type->id,$art)){ ?>
-                                            <input type="checkbox" class="custom-control-input" name="article[]" id="article{{ $a_type->id ?? '' }}" value="{{ $a_type->id }}" checked>
+                                        $art = $publication->article_type;
+                                        // $articleType = (App\Models\ArticleType::where('id','=',$art)->first());
+                                        if($a_type->id == $art){ ?>
+                                            <input type="radio" class="custom-control-input" name="article" id="article{{ $a_type->id ?? '' }}" value="{{ $a_type->id }}" checked>
                                             <label class="custom-control-label" for="article{{ $a_type->id ?? '' }}">{{ $a_type->article_type }}</label>
                                 <?php   }else{ ?>
-                                            <input type="checkbox" class="custom-control-input" name="article[]" id="article{{ $a_type->id ?? '' }}" value="{{ $a_type->id }}">
+                                            <input type="radio" class="custom-control-input" name="article" id="article{{ $a_type->id ?? '' }}" value="{{ $a_type->id }}">
                                             <label class="custom-control-label" for="article{{ $a_type->id ?? '' }}">{{ $a_type->article_type }}</label>
                                 <?php   }
                                     }else{ ?>
-                                        <input type="checkbox" class="custom-control-input" name="article[]" id="article{{ $a_type->id ?? '' }}" value="{{ $a_type->id }}">
+                                        <input type="radio" class="custom-control-input" name="article" id="article{{ $a_type->id ?? '' }}" value="{{ $a_type->id }}">
                                         <label class="custom-control-label" for="article{{ $a_type->id ?? '' }}">{{ $a_type->article_type }}</label>
                                 <?php   
                                     }

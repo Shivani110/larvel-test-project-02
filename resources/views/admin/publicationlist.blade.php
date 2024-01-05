@@ -25,14 +25,14 @@
             @foreach($publication as $data)
             <tr id="pbl{{ $data->id }}">
                 <th scope="row">{{ $i++ }}</th>
-                <td><img src="{{ asset('/image/'.$data->image) }}"></td>
+                <td><img src="{{ $data->image }}"></td>
                 <td>{{ $data->title }}</td>
                 <td>{{ $data->url }}</td>
                 <td>{{ $data->price }}</td>
                 <td>{{ $data->domain_authority }}</td>
                 <td>{{ $data->turn_around_time }}</td>
                 <td>
-                    <?php 
+                <?php 
                         if($data->genres ?? ''){
                             $genres = json_decode($data->genres);
                             foreach($genres as $val){
@@ -61,7 +61,7 @@
                 <td>
                     <?php 
                         if($data->country ?? ''){
-                            $id = $data->country;
+                            $id = json_decode($data->country);
                             $country = (App\Models\Country::where('id','=',$id)->first());
                             print_r($country->country_name);
                         }

@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin\PublicationController;
 // });
 
 Route::get('/',[UserController::class,'prpartnerlogin']);
-Route::get('/login',[UserController::class,'login']);
+Route::get('/admin-login',[UserController::class,'login']);
 
 Route::post('/admin-signin',[AuthController::class,'adminlogin']);
 Route::get('/logout',[AuthController::class,'logout']);
@@ -51,8 +51,11 @@ Route::group(['middleware'=>['admin']],function(){
     Route::get('/admin-dashboard/fileupload',[AdminController::class,'fileupload']);
     Route::post('/admin-dashboard/csvupload',[AdminController::class,'importfile']);
     Route::get('/admin-dashboard/export',[AdminController::class,'export']);
+    Route::get('/admin-dashboard/accountsetting',[AdminController::class,'accountSetting']);
+    Route::post('/admin-password/changepassword',[AdminController::class,'changePassword']);
 });
 
 Route::group(['middleware'=>['publication']],function(){
     Route::get('/publications',[PublicationController::class,'allpublications']);
+    Route::post('/publicationname',[PublicationController::class,'publicationName']);
 });

@@ -28,20 +28,20 @@ class AuthController extends Controller
                     return redirect('/admin-dashboard/index');
                 }else{
                     Auth::logout();
-                    return redirect('/login')->with('error',"Login failed");
+                    return redirect('/admin-login')->with('error',"Login failed");
                 }
                 
             }else{
-                return redirect('/login')->with('error',"The credentials doesn't matched");
+                return redirect('/admin-login')->with('error',"The credentials doesn't matched");
             }
         }else{
-            return redirect('/login')->with('error','Google recaptcha is not valid!');
+            return redirect('/admin-login')->with('error','Google recaptcha is not valid!');
         }
     }
 
     public function logout(){
         Auth::logout();
-        return redirect('/login');
+        return redirect('/admin-login');
     }
 
     public function authlogin(Request $request){

@@ -155,7 +155,7 @@ class AdminController extends Controller
 
     public function createPublications(Request $request){
         $request->validate([
-            'title' => 'required|unique:publications,title',
+            'title' => 'required',
             'url' => 'required',
             'price' => 'required',
             'domain' => 'required',
@@ -167,17 +167,18 @@ class AdminController extends Controller
             $image = $request->file('image');
             $extension = $image->getClientOriginalExtension();
             $imageName = 'pro' . rand(0, 1000) . time() . '.' . $extension;
+            $imagepath = asset('/image/'.$imageName);        
             $image->move(public_path('image'), $imageName);
         }
 
         if($request->genres != null){
             $genre = json_encode($request->genres);
+            $gen_id = str_replace('"','',$genres);
         }
 
         if($request->article != null){
-            $article = json_encode($request->article);
+            $article = $request->article;
         }
-
         
         if($request->country != null){
             $country = $request->country;
@@ -188,10 +189,10 @@ class AdminController extends Controller
         $publications->price = $request->price;
         $publications->domain_authority = $request->domain;
         $publications->turn_around_time = $request->tat;
-        $publications->genres = $genre;
+        $publications->genres = $gen_id;
         $publications->article_type = $article;
         $publications->country = $country;
-        $publications->image = $imageName;
+        $publications->image = $imagepath;
         $publications->save();
 
         return redirect('/admin-dashboard/insertpublication')->with('success','Production inserted successfully..');
@@ -219,19 +220,23 @@ class AdminController extends Controller
             $image = $request->file('image');
             $extension = $image->getClientOriginalExtension();
             $imageName = 'pro' . rand(0, 1000) . time() . '.' .$extension;
+            $imagepath = asset('/image/'.$imageName);
             $image->move(public_path('image'),imageName);
+
         }else{
-            $imageName = $publication->image;
+            $imagepath = $publication->image;
         }
 
         if($request->genres){
             $genres = json_encode($request->genres);
+            $gen_id = str_replace('"','',$genres);
         }else{
-            $genres = $publication->genres;
+            $gen_id = $publication->genres;
+           
         }
 
         if($request->article){
-            $article = json_encode($request->article);
+            $article = $request->article;
         }else{
             $article = $publication->article;
         }
@@ -248,10 +253,10 @@ class AdminController extends Controller
         $publications->price = $request->price;
         $publications->domain_authority = $request->domain;
         $publications->turn_around_time = $request->tat;
-        $publications->genres = $genres;
+        $publications->genres = $gen_id;
         $publications->article_type = $article;
         $publications->country = $country;
-        $publications->image = $imageName;
+        $publications->image = $imagepath;
         $publications->update();
 
         return redirect('/admin-dashboard/insertpublication/'.$publications->id)->with("success","Publications updated successfully..");
@@ -318,18 +323,110 @@ class AdminController extends Controller
             $data = fgetcsv($fileopen);
             $pricing = array();
 
-            while (($data = fgetcsv($fileopen))!== false) {
+            while (($data = fgetcsv($fileopen)) !== false) {
                array_push($pricing,$data);
-            }
-            echo '<pre>';
-            print_r($pricing[0][5]);
             
-            $array = explode(' ',$pricing[0][5] );
-            print_r($array);
-            
-            echo '</pre>';
+               foreach($pricing as $row){
+                    echo '<pre>';
+                    $images = $row[0];
+                    $title = $row[1];
+                    $price = $row[2];
+                    $domainAuthority = $row[3];
+                    $tat = $row[4];
+                    $url = $row[8];
+               }
+               $genre_arr = explode(' / ',$row[5]);
+               $gen_id = [];
 
+               foreach($genre_arr as $genre){
+                    $genres = Genre::where('genre_name','=',$genre)->first();
+                    if($genres){
+                        array_push($gen_id,$genres->id);
+                    }else{
+                        $gen_name = trim($genre);
+                        $slug = trim($genre);
+                        $slug= preg_replace('/[^a-zA-Z0-9 -]/','',$slug);
+                        $slug= str_replace('','-', $slug);
+                        $slug= strtolower($slug);
+
+                        $genreS = new Genre;
+                        $genreS->genre_name = $gen_name;
+                        $genreS->genre_slug = $slug;
+                        $genreS->save();
+                        array_push($gen_id,$genreS->id); 
+                    }
+                }
+                $g_id = json_encode($gen_id);
+
+                $article = $row[6];
+                $articleType = ArticleType::where('article_type','=',$article)->first();
+
+                if($articleType){
+                    $art_id = $articleType->id;
+                }else{
+                    $artType = new ArticleType;
+                    $artType->article_type = $article;
+                    $artType->save();
+                    $art_id = $artType->id;
+                }
+                $country = $row[7];
+                $countries = Country::where('country_name','=',$country)->first();
+
+                if($countries){
+                    $c_id = $countries->id;
+                }else{
+                    $contry = new Country;
+                    $contry->country_name = $country;
+                    $contry->country_code = strtoupper($country);
+                    $contry->save();
+                    $c_id = $contry->id; 
+                }
+              
+
+                $publications = new Publications;
+                $publications->title = $title;
+                $publications->url = $url;
+                $publications->price = $price;
+                $publications->domain_authority = $domainAuthority;
+                $publications->turn_around_time = $tat;
+                $publications->genres = $g_id;
+                $publications->article_type = $art_id;
+                $publications->country = $c_id;
+                $publications->image = $images;
+                $publications->save();
+            }
+            
             fclose($fileopen);
+
+            return back()->with("success","File Uploaded Successfully");
+        }
+
+    }
+
+    public function accountSetting(){
+        return view('admin.accountsetting');
+    }
+
+    public function changePassword(Request $request){
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required',
+            'confirm_password' => 'required',
+        ]);
+
+        if(Hash::check($request->old_password, Auth()->user()->password)){
+            if($request->new_password == $request->confirm_password){
+                $password = Hash::make($request->new_password);
+                $user = User::where('id','=',Auth::user()->id)->first();
+                $user->password = $password;
+                $user->update();
+            
+                return back()->with('success','Password Changed Successfully');
+            }else{
+                return back()->with('error','Password confirmation not matched');
+            }
+        }else{
+            return back()->with('error','Old Password is not matched');
         }
 
     }

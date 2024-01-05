@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('genres');
             $table->string('article_type');
             $table->string('country');
-            $table->string('image');
+            $table->text('image');
             $table->timestamps();
         });
     }
