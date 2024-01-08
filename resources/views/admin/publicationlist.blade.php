@@ -47,13 +47,9 @@
                 <td>
                     <?php 
                         if($data->article_type ?? ''){
-                            $article_type = json_decode($data->article_type);
-                            foreach($article_type as $val){
-                                $article = (App\Models\ArticleType::where('id','=',$val)->first()); ?>
-                                <ul>
-                                    <li>{{ $article->article_type }}</li>
-                                </ul>
-                    <?php   }
+                            $article_type = $data->article_type;
+                            $article = (App\Models\ArticleType::where('id','=',$article_type)->first());
+                            print_r($article->article_type);   
                         }
                     
                     ?>
@@ -61,7 +57,7 @@
                 <td>
                     <?php 
                         if($data->country ?? ''){
-                            $id = json_decode($data->country);
+                            $id = $data->country;
                             $country = (App\Models\Country::where('id','=',$id)->first());
                             print_r($country->country_name);
                         }

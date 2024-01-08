@@ -81,10 +81,9 @@
                                                 <div class="form-group asc_wrapper">
                                                     <label for="exampleFormControlSelect1">Sort by</label>
                                                     <select class="form-control" id="exampleFormControlSelect1">
-                                                        <option>Price (Asc)</option>
-                                                        <option>lorem ipsum</option>
-                                                        <option>lorem ipsum</option>
-                                                        <option>lorem ipsum</option>
+                                                        <option value=""></option>
+                                                        <option value="fv">Price(ASC)</option>
+                                                        <option value="rg">Price(DESC)</option>
                                                     </select>
                                                     <div class="chosen-container chosen-container-single" title="" id="exampleFormControlSelect1_chosen" style="width: 100%;">
                                                     <div>
@@ -116,10 +115,10 @@
                                                 </div>
                                             </div>
                                             <div class="form-group wrapper">
-                                                <label for="formGroupExampleInput">Select regions</label>
-                                                <select multiple="" data-placeholder="Select regions">
+                                                <label for="formGroupExampleInput1">Select regions</label>
+                                                <select multiple="" data-placeholder="Select regions" id="formGroupExampleInput1">
                                                     @foreach($countries as $cnt)
-                                                    <option>{{ $cnt->country_name }}</option>
+                                                    <option val="$cnt->country_name">{{ $cnt->country_name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -159,14 +158,6 @@
                                                         <th class="text-left">Publication</th>
                                                         <th>Genres</th>
                                                         <th>Price</th>
-                                                        <th>DA
-                                                        <div class="tooltip"><i class="fa-regular fa-circle-question"></i>
-                                                            <p class="tooltiptext">
-                                                                <span>Domain authority</span><br>
-                                                                Search engine ranking score (1-100)
-                                                            </p>
-                                                        </div>
-                                                        </th>
                                                         <th>TAT
                                                             <div class="tooltip"><i class="fa-regular fa-circle-question"></i>
                                                                 <p class="tooltiptext">
@@ -174,6 +165,14 @@
                                                                 Estimated time to deliver
                                                                 </p>
                                                             </div>
+                                                        </th>
+                                                        <th>DA
+                                                        <div class="tooltip"><i class="fa-regular fa-circle-question"></i>
+                                                            <p class="tooltiptext">
+                                                                <span>Domain authority</span><br>
+                                                                Search engine ranking score (1-100)
+                                                            </p>
+                                                        </div>
                                                         </th>
                                                         <th>Article Type</th>
                                                         <th>Country/Region</th>
@@ -193,38 +192,51 @@
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <div class="tooltip tooltip_data"><i class="fa-regular fa-circle-question"></i>
-                                                                <ul class="tooltiptext">
-                                                                <?php 
+                                                            <?php 
+                                                                if($data->genres ?? ''){
                                                                     $genres = json_decode($data->genres);
-                                                                    foreach($genres as $gen){
-                                                                        $genre = (App\Models\Genre::where('id','=',$gen)->first()); ?>
-                                                                            <li>{{ $genre->genre_name }}</li>
-                                                                    <?php     
-                                                                        }
-                                                                    ?>
-                                                                </ul>
-                                                            </div> 
+                                                                    if(count($genres)>1){ ?>
+                                                                        <div class="tooltip tooltip_data"><i class="fa-regular fa-circle-question"></i>
+                                                                            <ul class="tooltiptext">
+                                                                            <?php 
+                                                                                $genres = json_decode($data->genres);
+                                                                                foreach($genres as $gen){
+                                                                                    $genre = (App\Models\Genre::where('id','=',$gen)->first()); ?>
+                                                                                        <li>{{ $genre->genre_name }}</li>
+                                                                                <?php     
+                                                                                    }
+                                                                                ?>
+                                                                            </ul>
+                                                                        </div> 
+                                                            <?php   }else{ ?>
+                                                                        <?php 
+                                                                            $genres = json_decode($data->genres);
+                                                                            foreach($genres as $gen){
+                                                                                $genre = (App\Models\Genre::where('id','=',$gen)->first()); ?>
+                                                                                    <li>{{ $genre->genre_name }}</li>
+                                                                            <?php     
+                                                                                }
+                                                                            ?>
+                                                                        </ul>
+                                                        <?php       }
+                                                                }
+                                                            ?>
                                                         </td>
                                                         <td>{{ $data->price }}</td>
                                                         <td>{{ $data->turn_around_time }}</td>
                                                         <td>{{ $data->domain_authority }}</td>
                                                         <td>
                                                             <?php 
-                                                                $article = json_decode($data->article_type);
-                                                                foreach($article as $at){
-                                                                    $articleType = (App\Models\ArticleType::where('id','=',$at)->first());
-                                                                    print_r($articleType->article_type);
-                                                                }
+                                                                $article = $data->article_type;
+                                                                $articleType = (App\Models\ArticleType::where('id','=',$article)->first());
+                                                                print_r($articleType->article_type);    
                                                             ?>
                                                         </td>
                                                         <td>
                                                             <?php 
-                                                                $country = json_decode($data->country);
-                                                                foreach($country as $ct){
-                                                                    $countries = (App\Models\Country::where('id','=',$ct)->first());
-                                                                    print_r($countries->country_name);
-                                                                }
+                                                                $country = $data->country;
+                                                                $countries = (App\Models\Country::where('id','=',$country)->first());
+                                                                print_r($countries->country_name);
                                                             ?>
                                                         </td>
                                                     </tr>
@@ -532,28 +544,61 @@
 
     <script>
         $(document).ready(function(){
+            var publicationPrice = $('#exampleFormControlSelect1').val();
+            localStorage.setItem("price", publicationPrice);
+            prices = localStorage.getItem("price");
+            console.log(prices);
+
+            // var region = $('#formGroupExampleInput1').val();
+            // console.log(region);
+            // console.log(publicationPrice);
+
+            // var article = $('#atype').val();
+            // console.log(article);
             $('#formGroupExampleInput').keyup(function(){
                 var publicationName = $('#formGroupExampleInput').val();
                 var data = {
                     name: publicationName,
                     _token: "{{ csrf_token() }}"
                 }
-                $.ajax({
-                    url:"{{ url('publicationname') }}",
-                    type: "POST",
-                    data: data,
-                    dataType: "JSON",
-                    success: function(response){
-                        data = [];
-                        $.each(response, function(key,val){
-                            genr = val.genres;
-                            // console.log(genr);
-                            var html = '<tr id="pub'+val.id+'"><td class="cpy_content"><div class="cpy_logo"><div class="cpy_logo_img"><img src="'+val.image+'" class="img-fluid" alt=""></div><span><a href="javascript:void(0)">'+val.title+'</a></span></div></td><td><div class="tooltip tooltip_data"><i class="fa-regular fa-circle-question"></i><ul class="tooltiptext"><li>'+genr+'</li></ul></div></td><td>'+val.price+'</td><td>'+val.turn_around_time+'</td><td>'+val.domain_authority+'</td><td>'+val.article_type+'</td><td>'+val.country+'</td></tr>';
-                            data.push(html);
-                        });
-                        $('tbody').html(data);
-                    }
-                });
+                // $.ajax({
+                //     url:"{{ url('publicationname') }}",
+                //     type: "POST",
+                //     data: data,
+                //     dataType: "JSON",
+                //     success: function(response){ 
+                //         data = [];
+                //         if(response[0] == "" || response[1] == ""){
+                //             var html1 = '<span>Nothing here...</span>' ;
+                //             data.push(html1);
+                //         }else{
+                //             publication = response[0];
+                //             genres = response[1];
+                //             num = 0;
+
+                //             for(i=0; i<publication.length; i++){
+                //                 genre = [];
+                                
+                //                 $.each(genres[i],function(key,val){
+                //                     genrename = val.genre_name;
+                //                     genre.push(genrename);
+                //                 });
+
+                //                 if(genres[i].length>1){
+                //                     genress = '<div class="tooltip tooltip_data"><i class="fa-regular fa-circle-question"></i><ul class="tooltiptext"><li>'+genre+'</li></ul></div>';
+                //                 }else{
+                //                     genress = '<ul><li>'+genre+'</li></ul>';
+                //                 }
+
+                //                 var html = '<tr id="pub'+publication[i].id+'"><td class="cpy_content"><div class="cpy_logo"><div class="cpy_logo_img"><img src="'+publication[i].image+'" class="img-fluid" alt=""></div><span><a href="javascript:void(0)">'+publication[i].title+'</a></span></div></td><td>'+genress+'</td><td>'+publication[i].price+'</td><td>'+publication[i].turn_around_time+'</td><td>'+publication[i].domain_authority+'</td><td>'+publication[i].article_type.article_type+'</td><td>'+publication[i].country.country_name+'</td></tr>';
+                //                 data.push(html);
+                                
+                //                 num = num + 1;
+                //             }
+                //         }
+                //         $('tbody').html(data);
+                //     }
+                // });
             });
         });
     </script>

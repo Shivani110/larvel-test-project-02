@@ -173,7 +173,7 @@ class AdminController extends Controller
 
         if($request->genres != null){
             $genre = json_encode($request->genres);
-            $gen_id = str_replace('"','',$genres);
+            $gen_id = str_replace('"','',$genre);
         }
 
         if($request->article != null){

@@ -21,18 +21,20 @@ class PublicationController extends Controller
     
     public function publicationName(Request $request){
         $name = $request->name;
-        $publications = Publications::where('title','LIKE',$name.'%')->get();
-       
-        // foreach($publications as $data){
-        //     $article = json_decode($data->article_type);
-            
-        //     $articleType = ArticleType::where('id','=',$article)->first();
-
-        //     print_r($articleType->article_type);
-        // }
-        
-
-        return response()->json($publications);
+        $publications = Publications::where('title','LIKE',$name.'%')->with('articleType','country')->get();
+        // dd($publications);
+        $publication = [];
+        foreach($publications as $data){
+            $genres = json_decode($data->genres);
+            $genress = [];
+            foreach($genres as $gen){
+                $genre = Genre::where('id','=',$gen)->first();
+                array_push($genress,$genre);
+            }
+            array_push($publication,$genress);
+        }
+        $array = array($publications,$publication);
+        return response()->json($array);
         
     }
 }
