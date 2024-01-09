@@ -82,8 +82,8 @@
                                                     <label for="exampleFormControlSelect1">Sort by</label>
                                                     <select class="form-control" id="exampleFormControlSelect1">
                                                         <option value=""></option>
-                                                        <option value="fv">Price(ASC)</option>
-                                                        <option value="rg">Price(DESC)</option>
+                                                        <option value="ASC">Price(ASC)</option>
+                                                        <option value="DESC">Price(DESC)</option>
                                                     </select>
                                                     <div class="chosen-container chosen-container-single" title="" id="exampleFormControlSelect1_chosen" style="width: 100%;">
                                                     <div>
@@ -106,19 +106,19 @@
                                                         <span id="slider-range-value1">$0</span>
                                                     </div>
                                                     <div class="text-right caption">
-                                                        <span id="slider-range-value2">$32232</span>
+                                                        <span id="slider-range-value2">$56765</span>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <input type="hidden" name="min-value" value="">
-                                                    <input type="hidden" name="max-value" value="">
+                                                    <input type="hidden" name="min_value" value="">
+                                                    <input type="hidden" name="max_value" value="">
                                                 </div>
                                             </div>
                                             <div class="form-group wrapper">
                                                 <label for="formGroupExampleInput1">Select regions</label>
                                                 <select multiple="" data-placeholder="Select regions" id="formGroupExampleInput1">
                                                     @foreach($countries as $cnt)
-                                                    <option val="$cnt->country_name">{{ $cnt->country_name }}</option>
+                                                    <option value="{{$cnt->id}}">{{ $cnt->country_name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -126,8 +126,8 @@
                                                 <h3>Select genres</h3>
                                                 <div class="publication_list">
                                                     @foreach($genres as $genr)
-                                                    <input type="checkbox" id="genres{{$genr->id}}" style="display:none;">
-                                                    <label for="genres{{$genr->id}}"> <a href="javascript:void(0)">{{ $genr->genre_name }}</a></label>
+                                                    <input type="checkbox" id="genres{{$genr->id}}" name="genres" class="checkgenre" value="{{ $genr->id ?? '' }}" style="display:none;">
+                                                    <label for="genres{{$genr->id}}" dataid="{{ $genr->id ?? '' }}"><a>{{ $genr->genre_name }}</a></label>
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -135,14 +135,14 @@
                                                 <h3>Article Type</h3>
                                                 <div class="publication_list">
                                                     @foreach($articles as $art)
-                                                    <input type="checkbox" id="atype{{ $art->id }}" style="display:none;">
-                                                    <label for="atype{{ $art->id }}"><a href="javascript:void(0)">{{ $art->article_type }}</a></label>
+                                                    <input type="checkbox" id="atype{{ $art->id }}" name="atype" class="checkarticle" value="{{ $art->id ?? '' }}" style="display:none;">
+                                                    <label for="atype{{ $art->id }}" data-id="{{ $art->id ?? '' }}"><a>{{ $art->article_type }}</a></label>
                                                     @endforeach
                                                 </div>
                                             </div>
                                             <hr>
                                             <div class="ques_btn">
-                                                <a class="btn" href="javascript:void(0)" role="button">Reset all filters</a>
+                                                <a class="btn" role="button">Reset all filters</a>
                                             </div>
                                         </form>
                                     </div>
@@ -213,16 +213,24 @@
                                                                             $genres = json_decode($data->genres);
                                                                             foreach($genres as $gen){
                                                                                 $genre = (App\Models\Genre::where('id','=',$gen)->first()); ?>
-                                                                                    <li>{{ $genre->genre_name }}</li>
+                                                                                {{ $genre->genre_name }}
                                                                             <?php     
                                                                                 }
                                                                             ?>
-                                                                        </ul>
-                                                        <?php       }
-                                                                }
+                                                                <?php   }
+                                                                    }
+                                                                ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php 
+                                                                if($data->price == 0){
+                                                                    print_r('ASK');
+                                                                }else{ ?>
+                                                                    ${{ $data->price }}
+                                                        <?php    }
+                                                                    
                                                             ?>
                                                         </td>
-                                                        <td>{{ $data->price }}</td>
                                                         <td>{{ $data->turn_around_time }}</td>
                                                         <td>{{ $data->domain_authority }}</td>
                                                         <td>
@@ -544,62 +552,110 @@
 
     <script>
         $(document).ready(function(){
-            var publicationPrice = $('#exampleFormControlSelect1').val();
-            localStorage.setItem("price", publicationPrice);
-            prices = localStorage.getItem("price");
-            console.log(prices);
+            var prices = '';
+            var countries = '';
+            var genres = [];
+            var articletype = [];
+            var publicationname = '';
+            var min_price = '';
+            var max_price = '';
 
-            // var region = $('#formGroupExampleInput1').val();
-            // console.log(region);
-            // console.log(publicationPrice);
+            $('#slider-range').on('click',function(){
+                var minprice = $('#slider-range-value1').html().replace('$','');
+                var maxprice = $('#slider-range-value2').html().replace('$','');
+                $('.min_value').val(minprice);
+                $('.max_value').val(maxprice);
 
-            // var article = $('#atype').val();
-            // console.log(article);
+                min_price = minprice;
+                max_price = maxprice;
+                publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+            });
+
+            $('#exampleFormControlSelect1').change(function(){
+                var price = $(this).val();
+                prices = price;
+                publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+            });
+            
+            $('#formGroupExampleInput1').change(function(){
+                var country = $(this).val();
+                countries = country;
+                publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+            });
+
+            $('.checkgenre').change(function(){
+                if(this.checked){
+                    var genre = $(this).val();
+                    genres.push(genre);
+                    publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+                }
+            });
+
+            $('.checkarticle').change(function(){
+                if(this.checked){
+                    var article = $(this).val();
+                    articletype.push(article);
+                    publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+                }
+            });
+
             $('#formGroupExampleInput').keyup(function(){
-                var publicationName = $('#formGroupExampleInput').val();
+                var name = $(this).val();
+                publicationname = name;
+                publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+            });
+
+            function  publication(prices,countries,genres,articletype,publicationname,min_price,max_price){
                 var data = {
-                    name: publicationName,
+                    name:publicationname,
+                    price:prices,
+                    country:countries,
+                    genre:genres,
+                    articletype:articletype,
+                    minprice:min_price,
+                    maxprice:max_price,
                     _token: "{{ csrf_token() }}"
                 }
-                // $.ajax({
-                //     url:"{{ url('publicationname') }}",
-                //     type: "POST",
-                //     data: data,
-                //     dataType: "JSON",
-                //     success: function(response){ 
-                //         data = [];
-                //         if(response[0] == "" || response[1] == ""){
-                //             var html1 = '<span>Nothing here...</span>' ;
-                //             data.push(html1);
-                //         }else{
-                //             publication = response[0];
-                //             genres = response[1];
-                //             num = 0;
+                $.ajax({
+                    url:"{{ url('publicationname') }}",
+                    type: "POST",
+                    data: data,
+                    dataType: "JSON",
+                    success: function(response){ 
+                        console.log(response);
+                        // data = [];
+                        // if(response[0] == "" || response[1] == ""){
+                        //     var html1 = '<span>Nothing here...</span>' ;
+                        //     data.push(html1);
+                        // }else{
+                        //     allpublication = response[0];
+                        //     genres = response[1];
+                        //     num = 0;
 
-                //             for(i=0; i<publication.length; i++){
-                //                 genre = [];
+                        //     for(i=0; i<allpublication.length; i++){
+                        //         genre = [];
                                 
-                //                 $.each(genres[i],function(key,val){
-                //                     genrename = val.genre_name;
-                //                     genre.push(genrename);
-                //                 });
+                        //         $.each(genres[i],function(key,val){
+                        //             genrename = val.genre_name;
+                        //             genre.push(genrename);
+                        //         });
 
-                //                 if(genres[i].length>1){
-                //                     genress = '<div class="tooltip tooltip_data"><i class="fa-regular fa-circle-question"></i><ul class="tooltiptext"><li>'+genre+'</li></ul></div>';
-                //                 }else{
-                //                     genress = '<ul><li>'+genre+'</li></ul>';
-                //                 }
+                        //         if(genres[i].length>1){
+                        //             genress = '<div class="tooltip tooltip_data"><i class="fa-regular fa-circle-question"></i><ul class="tooltiptext"><li>'+genre+'</li></ul></div>';
+                        //         }else{
+                        //             genress = genre;
+                        //         }
 
-                //                 var html = '<tr id="pub'+publication[i].id+'"><td class="cpy_content"><div class="cpy_logo"><div class="cpy_logo_img"><img src="'+publication[i].image+'" class="img-fluid" alt=""></div><span><a href="javascript:void(0)">'+publication[i].title+'</a></span></div></td><td>'+genress+'</td><td>'+publication[i].price+'</td><td>'+publication[i].turn_around_time+'</td><td>'+publication[i].domain_authority+'</td><td>'+publication[i].article_type.article_type+'</td><td>'+publication[i].country.country_name+'</td></tr>';
-                //                 data.push(html);
+                        //         var html = '<tr id="pub'+allpublication[i].id+'"><td class="cpy_content"><div class="cpy_logo"><div class="cpy_logo_img"><img src="'+allpublication[i].image+'" class="img-fluid" alt=""></div><span><a href="javascript:void(0)">'+allpublication[i].title+'</a></span></div></td><td>'+genress+'</td><td>'+allpublication[i].price+'</td><td>'+allpublication[i].turn_around_time+'</td><td>'+allpublication[i].domain_authority+'</td><td>'+allpublication[i].article_type.article_type+'</td><td>'+allpublication[i].country.country_name+'</td></tr>';
+                        //         data.push(html);
                                 
-                //                 num = num + 1;
-                //             }
-                //         }
-                //         $('tbody').html(data);
-                //     }
-                // });
-            });
+                        //         num = num + 1;
+                        //     }
+                        // }
+                        // $('tbody').html(data);
+                    }
+                });
+            }
         });
     </script>
 
