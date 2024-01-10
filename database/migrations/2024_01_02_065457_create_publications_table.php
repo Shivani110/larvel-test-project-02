@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('url');
-            $table->string('price');
+            $table->integer('price');
             $table->string('domain_authority');
             $table->string('turn_around_time');
             $table->string('genres');

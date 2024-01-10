@@ -24,9 +24,6 @@ h3 {
 	line-height: 33px;
 	color: #1E1E1E;
 }
-h4 {
-	
-}
 
 .p-100 {
 	padding: 100px 0;
@@ -371,6 +368,7 @@ body.bg_color {
 	background: rgba(146, 92, 3, 0.17);
 	color: #925C03;
 }
+
 .leftside_rang form .publication_list {
 	display: flex;
 	flex-wrap: wrap;

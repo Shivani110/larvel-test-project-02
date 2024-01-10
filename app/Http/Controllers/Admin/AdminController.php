@@ -173,7 +173,6 @@ class AdminController extends Controller
 
         if($request->genres != null){
             $genre = json_encode($request->genres);
-            $gen_id = str_replace('"','',$genre);
         }
 
         if($request->article != null){
@@ -189,7 +188,7 @@ class AdminController extends Controller
         $publications->price = $request->price;
         $publications->domain_authority = $request->domain;
         $publications->turn_around_time = $request->tat;
-        $publications->genres = $gen_id;
+        $publications->genres = $genre;
         $publications->article_type = $article;
         $publications->country = $country;
         $publications->image = $imagepath;
@@ -229,10 +228,8 @@ class AdminController extends Controller
 
         if($request->genres){
             $genres = json_encode($request->genres);
-            $gen_id = str_replace('"','',$genres);
         }else{
-            $gen_id = $publication->genres;
-           
+            $genres = $publication->genres;
         }
 
         if($request->article){
@@ -253,7 +250,7 @@ class AdminController extends Controller
         $publications->price = $request->price;
         $publications->domain_authority = $request->domain;
         $publications->turn_around_time = $request->tat;
-        $publications->genres = $gen_id;
+        $publications->genres = $genres;
         $publications->article_type = $article;
         $publications->country = $country;
         $publications->image = $imagepath;
@@ -330,7 +327,6 @@ class AdminController extends Controller
                     echo '<pre>';
                     $images = $row[0];
                     $title = $row[1];
-                    $price = $row[2];
                     $domainAuthority = $row[3];
                     $tat = $row[4];
                     $url = $row[8];
@@ -341,7 +337,8 @@ class AdminController extends Controller
                foreach($genre_arr as $genre){
                     $genres = Genre::where('genre_name','=',$genre)->first();
                     if($genres){
-                        array_push($gen_id,$genres->id);
+                        $genre_id = "$genres->id";
+                        array_push($gen_id,$genre_id);
                     }else{
                         $gen_name = trim($genre);
                         $slug = trim($genre);
@@ -353,7 +350,8 @@ class AdminController extends Controller
                         $genreS->genre_name = $gen_name;
                         $genreS->genre_slug = $slug;
                         $genreS->save();
-                        array_push($gen_id,$genreS->id); 
+                        $genreSid = "$genreS->id";
+                        array_push($gen_id,$genreSid); 
                     }
                 }
                 $g_id = json_encode($gen_id);
@@ -381,7 +379,13 @@ class AdminController extends Controller
                     $contry->save();
                     $c_id = $contry->id; 
                 }
-              
+                
+                $price = $row[2];
+                if($price == "ASK"){
+                    $price = 0;
+                }else{
+                    $price = $row[2];
+                }
 
                 $publications = new Publications;
                 $publications->title = $title;

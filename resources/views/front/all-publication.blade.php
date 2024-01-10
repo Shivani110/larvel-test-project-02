@@ -110,8 +110,8 @@
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <input type="hidden" name="min_value" value="">
-                                                    <input type="hidden" name="max_value" value="">
+                                                    <input type="hidden" id="min_value" name="min_value" value="">
+                                                    <input type="hidden" id="max_value" name="max_value" value="">
                                                 </div>
                                             </div>
                                             <div class="form-group wrapper">
@@ -127,7 +127,7 @@
                                                 <div class="publication_list">
                                                     @foreach($genres as $genr)
                                                     <input type="checkbox" id="genres{{$genr->id}}" name="genres" class="checkgenre" value="{{ $genr->id ?? '' }}" style="display:none;">
-                                                    <label for="genres{{$genr->id}}" dataid="{{ $genr->id ?? '' }}"><a>{{ $genr->genre_name }}</a></label>
+                                                    <label for="genres{{$genr->id}}"><a id="genid{{$genr->id}}">{{ $genr->genre_name }}</a></label>
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -136,7 +136,7 @@
                                                 <div class="publication_list">
                                                     @foreach($articles as $art)
                                                     <input type="checkbox" id="atype{{ $art->id }}" name="atype" class="checkarticle" value="{{ $art->id ?? '' }}" style="display:none;">
-                                                    <label for="atype{{ $art->id }}" data-id="{{ $art->id ?? '' }}"><a>{{ $art->article_type }}</a></label>
+                                                    <label for="atype{{ $art->id }}"><a id="a_id{{$art->id}}">{{ $art->article_type }}</a></label>
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -557,63 +557,97 @@
             var genres = [];
             var articletype = [];
             var publicationname = '';
-            var min_price = '';
-            var max_price = '';
+            var minprice = '';
+            var maxprice = '';
 
-            $('#slider-range').on('click',function(){
-                var minprice = $('#slider-range-value1').html().replace('$','');
-                var maxprice = $('#slider-range-value2').html().replace('$','');
-                $('.min_value').val(minprice);
-                $('.max_value').val(maxprice);
+            $(".noUi-handle").on("click", function () {
+                $(this).width(50);
+            });
+            var rangeSlider = document.getElementById("slider-range");
+            var moneyFormat = wNumb({
+                decimals: 0,
+                thousand: ",",
+                prefix: "$"
+            });
+            noUiSlider.create(rangeSlider, {
+                start: [0, 30000],
+                step: 1,
+                range: {
+                min: [0],
+                max: [30000]
+                },
+                format: moneyFormat,
+                connect: true
+            });
 
-                min_price = minprice;
-                max_price = maxprice;
-                publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+    // Set visual min and max values and also update value hidden form inputs
+            rangeSlider.noUiSlider.on("update", function (values, handle) {
+                document.getElementById("slider-range-value1").innerHTML = values[0];
+                document.getElementById("slider-range-value2").innerHTML = values[1];
+                document.getElementsByName("min-value").value = moneyFormat.from(values[0]);
+                document.getElementsByName("max-value").value = moneyFormat.from(values[1]);
+                
+                $('#slider-range').click(function(){
+                    min = $('#slider-range-value1').html().replace('$','');
+                    max = $('#slider-range-value2').html().replace('$','');
+                    min_price = min.replace(',','');
+                    max_price = max.replace(',','');
+                    minprice = min_price;
+                    maxprice = max_price;
+
+                    publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
+                })
             });
 
             $('#exampleFormControlSelect1').change(function(){
                 var price = $(this).val();
                 prices = price;
-                publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+                publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
             });
             
             $('#formGroupExampleInput1').change(function(){
                 var country = $(this).val();
                 countries = country;
-                publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+                publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
             });
 
             $('.checkgenre').change(function(){
                 if(this.checked){
-                    var genre = $(this).val();
+                    var genre = $(this).val(); 
+                    $('#genid'+genre).addClass('selected');
+                    $('.selected').css('background','rgba(146, 92, 3, 0.17)');
+                    $('.selected').css('color','#925C03');
                     genres.push(genre);
-                    publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+                    publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
                 }
             });
 
             $('.checkarticle').change(function(){
                 if(this.checked){
                     var article = $(this).val();
+                    $('#a_id'+article).addClass('checked');
+                    $('.checked').css('background','rgba(146, 92, 3, 0.17)');
+                    $('.checked').css('color','#925C03');
                     articletype.push(article);
-                    publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+                    publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
                 }
             });
 
             $('#formGroupExampleInput').keyup(function(){
                 var name = $(this).val();
                 publicationname = name;
-                publication(prices,countries,genres,articletype,publicationname,min_price,max_price);
+                publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
             });
 
-            function  publication(prices,countries,genres,articletype,publicationname,min_price,max_price){
+            function  publication(prices,countries,genres,articletype,publicationname,minprice,maxprice){
                 var data = {
                     name:publicationname,
                     price:prices,
                     country:countries,
                     genre:genres,
                     articletype:articletype,
-                    minprice:min_price,
-                    maxprice:max_price,
+                    minprice:minprice,
+                    maxprice:maxprice,
                     _token: "{{ csrf_token() }}"
                 }
                 $.ajax({
@@ -623,40 +657,51 @@
                     dataType: "JSON",
                     success: function(response){ 
                         console.log(response);
-                        // data = [];
-                        // if(response[0] == "" || response[1] == ""){
-                        //     var html1 = '<span>Nothing here...</span>' ;
-                        //     data.push(html1);
-                        // }else{
-                        //     allpublication = response[0];
-                        //     genres = response[1];
-                        //     num = 0;
+                        data = [];
+                        if(response[0] == "" || response[1] == ""){
+                            var html1 = '<span>Nothing here...</span>' ;
+                            var total = response[2];
+                            $('.publications_show').html('<span>Showing 0 of '+total+' publications</span>');
+                            data.push(html1);
+                        }else{
+                            allpublication = response[0];
+                            genres = response[1];
+                            total = response[2];
+                            result = allpublication.length;
+                            num = 0;
 
-                        //     for(i=0; i<allpublication.length; i++){
-                        //         genre = [];
+                            for(i=0; i<allpublication.length; i++){
+                                genre = [];
+                                $.each(genres[i],function(key,val){
+                                    genrename = val.genre_name;
+                                    genre.push(genrename);
+                                });
+
+                                if(genres[i].length>1){
+                                    genress = '<div class="tooltip tooltip_data"><i class="fa-regular fa-circle-question"></i><ul class="tooltiptext"><li>'+genre+'</li></ul></div>';
+                                }else{
+                                    genress = genre;
+                                }
+
+                                if(allpublication[i].price == 0){
+                                    price = 'ASK';
+                                }else{
+                                    price = '$'+allpublication[i].price+'';
+                                }
+
+                                var html = '<tr id="pub'+allpublication[i].id+'"><td class="cpy_content"><div class="cpy_logo"><div class="cpy_logo_img"><img src="'+allpublication[i].image+'" class="img-fluid" alt=""></div><span><a href="javascript:void(0)">'+allpublication[i].title+'</a></span></div></td><td>'+genress+'</td><td>'+price+'</td><td>'+allpublication[i].turn_around_time+'</td><td>'+allpublication[i].domain_authority+'</td><td>'+allpublication[i].article_type.article_type+'</td><td>'+allpublication[i].country.country_name+'</td></tr>';
+                                data.push(html);
                                 
-                        //         $.each(genres[i],function(key,val){
-                        //             genrename = val.genre_name;
-                        //             genre.push(genrename);
-                        //         });
-
-                        //         if(genres[i].length>1){
-                        //             genress = '<div class="tooltip tooltip_data"><i class="fa-regular fa-circle-question"></i><ul class="tooltiptext"><li>'+genre+'</li></ul></div>';
-                        //         }else{
-                        //             genress = genre;
-                        //         }
-
-                        //         var html = '<tr id="pub'+allpublication[i].id+'"><td class="cpy_content"><div class="cpy_logo"><div class="cpy_logo_img"><img src="'+allpublication[i].image+'" class="img-fluid" alt=""></div><span><a href="javascript:void(0)">'+allpublication[i].title+'</a></span></div></td><td>'+genress+'</td><td>'+allpublication[i].price+'</td><td>'+allpublication[i].turn_around_time+'</td><td>'+allpublication[i].domain_authority+'</td><td>'+allpublication[i].article_type.article_type+'</td><td>'+allpublication[i].country.country_name+'</td></tr>';
-                        //         data.push(html);
-                                
-                        //         num = num + 1;
-                        //     }
-                        // }
-                        // $('tbody').html(data);
+                                num = num + 1;
+                                $('.publications_show').html('<span>Showing '+result+' of '+total+' publications</span>');
+                            }
+                        }
+                        $('tbody').html(data);
                     }
                 });
             }
         });
+        
     </script>
 
 </body>
