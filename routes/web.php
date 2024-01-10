@@ -56,7 +56,6 @@ Route::group(['middleware'=>['admin']],function(){
 });
 
 Route::group(['middleware'=>['publication']],function(){
-    Route::get('/mostpopular',[PublicationController::class,'mostpopular']);
     Route::get('/publications',[PublicationController::class,'allpublications']);
     Route::post('/publicationname',[PublicationController::class,'publicationName']);
 });

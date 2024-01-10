@@ -11,20 +11,12 @@ use App\Models\ArticleType;
 
 class PublicationController extends Controller
 {
-    public function mostpopular(){
-        $publications = Publications::all();
-        $genres = Genre::all();
-        $countries = Country::all();
-        $articles = ArticleType::all();
-        return view('front.userdashboard',compact('publications','genres','countries','articles'));
-    }
-
     public function allpublications(){
         $publications = Publications::all();
         $genres = Genre::all();
         $countries = Country::all();
         $articles = ArticleType::all();
-        return view('front.all-publication',compact('publications','genres','countries','articles'));
+        return view('front.allPublications',compact('publications','genres','countries','articles'));
     }
     
     public function publicationName(Request $request){
