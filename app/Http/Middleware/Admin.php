@@ -20,10 +20,10 @@ class Admin
             if(Auth::user()->role == '1'){
                 return $next($request);
             }else{
-                return redirect('/login');
+                return redirect('/admin-login');
             }
         }else{
-            return redirect('/login');
+            return redirect('/admin-login');
         }
     }
 }

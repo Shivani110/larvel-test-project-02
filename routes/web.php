@@ -53,6 +53,12 @@ Route::group(['middleware'=>['admin']],function(){
     Route::get('/admin-dashboard/export',[AdminController::class,'export']);
     Route::get('/admin-dashboard/accountsetting',[AdminController::class,'accountSetting']);
     Route::post('/admin-password/changepassword',[AdminController::class,'changePassword']);
+    Route::get('/admin-dashboard/bundlecategory',[AdminController::class,'bundleCategory']);
+    Route::post('/admin-dashboard/createcategory',[AdminController::class,'category']);
+    Route::post('/admin-dashboard/deletecategory',[AdminController::class,'deletecategory']);
+    Route::get('/admin-dashboard/packagebundle',[AdminController::class,'bundle']);
+    Route::post('/admin-dashboard/createbundle',[AdminController::class,'createBundle']);
+    Route::post('/admin-dashboard/getpublication',[AdminController::class,'getPublication']);
 });
 
 Route::group(['middleware'=>['publication']],function(){

@@ -173,7 +173,7 @@
                                                                     <img src="{{ $data->image }}" class="img-fluid" alt="">
                                                                 </div>
                                                                 <span>
-                                                                    <a href="javascript:void(0)">{{ $data->title }}</a>
+                                                                    <a href="{{ $data->url }}">{{ $data->title }}</a>
                                                                 </span>
                                                             </div>
                                                         </td>
@@ -212,7 +212,8 @@
                                                                 if($data->price == 0){
                                                                     print_r('ASK');
                                                                 }else{ ?>
-                                                                    ${{ $data->price }}
+                                                                    ${{ number_format($data->price, 2) }} 
+                                                                    <!-- ${{ $data->price }} -->
                                                         <?php    }
                                                                     
                                                             ?>
@@ -626,7 +627,7 @@
                 publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
             });
 
-            function  publication(prices,countries,genres,articletype,publicationname,minprice,maxprice){
+            function publication(prices,countries,genres,articletype,publicationname,minprice,maxprice){
                 var data = {
                     name:publicationname,
                     price:prices,
@@ -671,12 +672,14 @@
                                 }
 
                                 if(allpublication[i].price == 0){
-                                    price = 'ASK';
+                                    formattedprice = 'ASK';
                                 }else{
-                                    price = '$'+allpublication[i].price+'';
+                                    price = allpublication[i].price;
+                                    fprice = price.toLocaleString(undefined, { maximumFractionDigits: 2 });
+                                    formattedprice = '$'+fprice+'.00';
                                 }
 
-                                var html = '<tr id="pub'+allpublication[i].id+'"><td class="cpy_content"><div class="cpy_logo"><div class="cpy_logo_img"><img src="'+allpublication[i].image+'" class="img-fluid" alt=""></div><span><a href="javascript:void(0)">'+allpublication[i].title+'</a></span></div></td><td>'+genress+'</td><td>'+price+'</td><td>'+allpublication[i].turn_around_time+'</td><td>'+allpublication[i].domain_authority+'</td><td>'+allpublication[i].article_type.article_type+'</td><td>'+allpublication[i].country.country_name+'</td></tr>';
+                                var html = '<tr id="pub'+allpublication[i].id+'"><td class="cpy_content"><div class="cpy_logo"><div class="cpy_logo_img"><img src="'+allpublication[i].image+'" class="img-fluid" alt=""></div><span><a href="'+allpublication[i].url+'">'+allpublication[i].title+'</a></span></div></td><td>'+genress+'</td><td>'+formattedprice+'</td><td>'+allpublication[i].turn_around_time+'</td><td>'+allpublication[i].domain_authority+'</td><td>'+allpublication[i].article_type.article_type+'</td><td>'+allpublication[i].country.country_name+'</td></tr>';
                                 data.push(html);
                                 
                                 num = num + 1;

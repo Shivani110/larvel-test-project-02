@@ -251,7 +251,11 @@
                     <div class="row g-3">
                         <div class="col-lg-7 offset-lg-5">
                             <div class="form-group mt-2">
-                                <button type="submit" class="btn btn-lg btn-primary">Add Publications</button>
+                            @if(isset($publication))
+                                <button type="submit" class="btn btn-md btn-primary">Update Publications</button>    
+                            @else
+                                <button type="submit" class="btn btn-md btn-primary">Add Publications</button>
+                            @endif
                             </div>
                         </div>
                     </div>
