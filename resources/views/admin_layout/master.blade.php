@@ -127,8 +127,26 @@
                                         <li class="nk-menu-item">
                                             <a href="{{ url('admin-dashboard/packagebundle') }}" class="nk-menu-link"><span class="nk-menu-text">Package Bundle</span></a>
                                         </li>
+                                        <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/packagelist') }}" class="nk-menu-link"><span class="nk-menu-text">Package Bundle List</span></a>
+                                        </li>
                                     </ul> <!-- .nk-menu-sub -->
-                                </li>               
+                                </li> 
+                                <li class="nk-menu-item has-sub">
+                                    <a href="" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-tile-thumb"></em></span>
+                                        <span class="nk-menu-text">Press Release</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/releasecategory') }}" class="nk-menu-link"><span class="nk-menu-text">Release Category</span></a>
+                                        </li>
+                                        <!-- <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/packagebundle') }}" class="nk-menu-link"><span class="nk-menu-text">Package Bundle</span></a>
+                                        </li> -->
+                                       
+                                    </ul> <!-- .nk-menu-sub -->
+                                </li>              
                             </ul>  
                         </div><!-- .nk-sidebar-menu -->
                     </div><!-- .nk-sidebar-content -->

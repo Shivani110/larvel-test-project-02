@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class PackageBundle extends Model
 {
     use HasFactory;
+
+    public function category(){
+        return $this->hasOne(Category::class,'id','category');
+    } 
+
+    public function publication(){
+        return $this->hasMany(Publications::class,'id','publications');
+    } 
+
 }

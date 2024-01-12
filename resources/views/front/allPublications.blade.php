@@ -244,194 +244,41 @@
                             </div>
                             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                                 <div class="business_wrapper">
-                                    <div class="business_content">
-                                        <h3>Business</h3>
-                                        <div class="business_grid">
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Bundle 1</span> <span class="business_price">$2,800</span></h4>
-                                                <h4 class="retail_text">Retail: $3,200</h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Bundle 2</span> <span class="business_price">$2,800</span></h4>
-                                                <h4 class="retail_text">Retail: $3,200</h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="business_wreap">
-                                                    <h4 class="bundle_text"><span>Bundle 3</span> <span class="business_price">$2,800</span></h4>
-                                                    <h4 class="retail_text">Retail: $3,200</h4>
-                                                    <div class="business_list">
-                                                        <h5>Publication</h5>
-                                                        <ul class="m-0">
-                                                            <li>LA Weekly</li>
-                                                            <li>IB Times (SG)</li>
-                                                            <li>Digital Journal</li>
-                                                            <li>NY Weekly</li>
-                                                            <li>Daily Scanner</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <?php
+                                    foreach($category as $ctg){ 
+                                        $ctgid = $ctg->id; ?>
                                         <div class="business_content">
-                                            <h3>Entertainment</h3>
-                                            <div class="business_grid">
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Bundle 1</span> <span class="business_price">$2,800</span></h4>
-                                                <h4 class="retail_text">Retail: $3,200</h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
+                                            <h3>{{ $ctg->category_name }}</h3>
+                                            <?php    
+                                                $package = (App\Models\Category::where('id','=',$ctgid)->with('bundle')->first()); ?>
+                                                <div class="business_grid"> 
+                                                <?php  
+                                                    foreach($package->bundle as $bundle){ 
+                                                ?>
+                                                    <div class="business_wreap">
+                                                        <h4 class="bundle_text"><span>{{ $bundle->title }}</span><span class="business_price">${{ number_format($bundle->price,2) }}</span></h4>
+                                                        <h4 class="retail_text">Retail: ${{ number_format($bundle->retail_price,2)}}</h4>
+                                                        
+                                                        <div class="business_list">
+                                                            <h5>Publication</h5>
+                                                            <ul class="m-0">
+                                                            <?php     
+                                                                $pId = json_decode($bundle->publications); 
+                                                                foreach($pId as $pID){
+                                                                    $publicationss = (App\Models\Publications::where('id','=',$pID)->first()); ?>
+                                                                    <li>{{ $publicationss->title }}</li>
+                                                        <?php   }
+                                                            ?>
+                                                            </ul>
+                                                          
+                                                        </div>
+                                                    </div>
+                                                <?php
+                                                } ?>
                                                 </div>
                                             </div>
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Bundle 2</span> <span class="business_price">$2,800</span></h4>
-                                                <h4 class="retail_text">Retail: $3,200</h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Bundle 3</span> <span class="business_price">$2,800</span></h4>
-                                                <h4 class="retail_text">Retail: $3,200</h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="business_content">
-                                        <h3>Crypto</h3>
-                                        <div class="business_grid">
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Bundle 1</span> <span class="business_price">$2,800</span></h4>
-                                                <h4 class="retail_text">Retail: $3,200</h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Bundle 2</span> <span class="business_price">$2,800</span></h4>
-                                                <h4 class="retail_text">Retail: $3,200</h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Bundle 3</span> <span class="business_price">$2,800</span></h4>
-                                                <h4 class="retail_text">Retail: $3,200</h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="business_content">
-                                        <h3>Music</h3>
-                                        <div class="business_grid">
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Bundle 1</span> <span class="business_price">$2,800</span></h4>
-                                                <h4 class="retail_text">Retail: $3,200</h4>
-                                            <div class="business_list">
-                                                <h5>Publication</h5>
-                                                <ul class="m-0">
-                                                    <li>LA Weekly</li>
-                                                    <li>IB Times (SG)</li>
-                                                    <li>Digital Journal</li>
-                                                    <li>NY Weekly</li>
-                                                    <li>Daily Scanner</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="business_wreap">
-                                            <h4 class="bundle_text"><span>Bundle 2</span> <span class="business_price">$2,800</span></h4>
-                                            <h4 class="retail_text">Retail: $3,200</h4>
-                                            <div class="business_list">
-                                                <h5>Publication</h5>
-                                                <ul class="m-0">
-                                                    <li>LA Weekly</li>
-                                                    <li>IB Times (SG)</li>
-                                                    <li>Digital Journal</li>
-                                                    <li>NY Weekly</li>
-                                                    <li>Daily Scanner</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="business_wreap">
-                                            <h4 class="bundle_text"><span>Bundle 3</span> <span class="business_price">$2,800</span></h4>
-                                            <h4 class="retail_text">Retail: $3,200</h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php   }
+                                        ?>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">

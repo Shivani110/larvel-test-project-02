@@ -13,6 +13,7 @@ use App\Models\Publications;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\PackageBundle;
+use App\Models\ReleaseCategory;
 use Hash;
 
 class AdminController extends Controller
@@ -484,6 +485,7 @@ class AdminController extends Controller
     public function deletecategory(Request $request){
         $id = $request->id;
         $category = Category::where('id','=',$id)->delete();
+        $package = PackageBundle::where('category','=',$id)->delete();
 
         return response()->json($category);
     }
@@ -502,10 +504,6 @@ class AdminController extends Controller
            'category' => 'required',
            'publication' => 'required'
         ]);
-        echo '<pre>';
-        print_r($request->all());
-        echo '</pre>';
-        die();
 
         $package = new PackageBundle;
         $package->title = $request->title;
@@ -520,13 +518,92 @@ class AdminController extends Controller
 
     public function getPublication(Request $request){
         $id = $request->id;
-        $publicationdata = [];
+        $publications = Publications::where('id','=',$id)->first();
 
-        foreach($id as $pid){
-            $publications = Publications::where('id','=',$pid)->first();
-            array_push($publicationdata,$publications);
+        return response()->json($publications);
+    }
+
+    public function getPackage(){
+        $package = PackageBundle::all();
+
+        return view('admin.packagelist',compact('package'));
+    }
+
+    public function editbundle($id){
+        $packageBundle = PackageBundle::where('id','=',$id)->first();
+        $category = Category::all();
+        $publications = Publications::all();
+        return view('admin.packagebundle',compact('packageBundle','category','publications'));
+    }
+
+    public function updateBundle(Request $request){
+        $request->validate([
+            'title' => 'required',
+            'price' => 'required',
+            'retail_price' => 'required',
+            'category' => 'required',
+            'publication' => 'required'
+        ]);
+        
+        $id = $request->id;
+       
+        $package = PackageBundle::where('id','=',$id)->first();
+        $package->title = $request->title;
+        $package->price = $request->price;
+        $package->retail_price = $request->retail_price;
+        $package->category = $request->category;
+        $package->publications = $request->publication;
+        $package->save();
+
+        return back()->with("success","Package Bundle Updated Successfully");
+    }
+
+    public function deletePackage(Request $request){
+        $package = PackageBundle::where('id','=',$request->id)->delete();
+
+        return response()->json($package);
+    }
+
+    public function releaseCategory(){
+        $category = ReleaseCategory::all();
+        return view('admin.releaseCategory',compact('category'));
+    }
+
+    public function createCategory(Request $request){
+        if($request->id){
+            $request->validate([
+                'categoryname' => 'required',
+            ]);
+    
+            $name = $request->categoryname;
+            $slug = trim($name);
+            $slug= preg_replace('/[^a-zA-Z0-9 -]/','',$slug);
+            $slug= str_replace(' ','-', $slug);
+            $slug= strtolower($slug);
+           
+            $category = ReleaseCategory::where('id','=',$request->id)->first();
+            $category->category_name = $name;
+            $category->slug = $slug;
+            $category->update();
+
+            $status = "edit";
+        }else{
+            $request->validate([
+                'categoryname' => 'required|unique:categories,category_name',
+            ]);
+
+            $name = $request->categoryname;
+            $slug = trim($name);
+            $slug= preg_replace('/[^a-zA-Z0-9 -]/','',$slug );
+            $slug= str_replace(' ','-', $slug);
+            $slug= strtolower($slug);
+
+            $category = new ReleaseCategory;
+            $category->category_name = $name;
+            $category->slug = $slug;
+            $category->save();
+            $status = "add";
         }
-
-        return response()->json($publicationdata);
+        return response()->json([$category,$status]);
     }
 }

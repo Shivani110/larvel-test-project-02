@@ -59,6 +59,12 @@ Route::group(['middleware'=>['admin']],function(){
     Route::get('/admin-dashboard/packagebundle',[AdminController::class,'bundle']);
     Route::post('/admin-dashboard/createbundle',[AdminController::class,'createBundle']);
     Route::post('/admin-dashboard/getpublication',[AdminController::class,'getPublication']);
+    Route::get('/admin-dashboard/packagelist',[AdminController::class,'getPackage']);
+    Route::get('/admin-dashboard/packagebundle/{id}',[AdminController::class,'editbundle']);
+    Route::post('/admin-dashboard/updatebundle',[AdminController::class,'updateBundle']);
+    Route::post('/admin-dashboard/deletebundle',[AdminController::class,'deletePackage']);
+    Route::get('/admin-dashboard/releasecategory',[AdminController::class,'releaseCategory']);
+    Route::post('/admin-dashboard/category',[AdminController::class,'createCategory']);
 });
 
 Route::group(['middleware'=>['publication']],function(){

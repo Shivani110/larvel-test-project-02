@@ -8,6 +8,8 @@ use App\Models\Publications;
 use App\Models\Genre;
 use App\Models\Country;
 use App\Models\ArticleType;
+use App\Models\PackageBundle;
+use App\Models\Category;
 
 class PublicationController extends Controller
 {
@@ -16,7 +18,9 @@ class PublicationController extends Controller
         $genres = Genre::all();
         $countries = Country::all();
         $articles = ArticleType::all();
-        return view('front.allPublications',compact('publications','genres','countries','articles'));
+        $category = Category::all();
+        
+        return view('front.allPublications',compact('publications','genres','countries','articles','category'));
     }
     
     public function publicationName(Request $request){
