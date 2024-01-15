@@ -14,6 +14,7 @@
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="{{ asset('/assets/css/dashlite.css?ver=3.1.2') }}">
     <link id="skin-default" rel="stylesheet" href="{{ asset('/assets/css/theme.css?ver=3.1.2') }}">
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.min.js" ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
@@ -99,9 +100,6 @@
                                         <li class="nk-menu-item">
                                             <a href="{{ url('admin-dashboard/useraccess') }}" class="nk-menu-link"><span class="nk-menu-text">UserAccess</span></a>
                                         </li>
-                                        <!-- <li class="nk-menu-item">
-                                            <a href="{{ url('admin-dashboard/publicationslist') }}" class="nk-menu-link"><span class="nk-menu-text">Publications List</span></a>
-                                        </li> -->
                                     </ul> <!-- .nk-menu-sub -->
                                 </li>
                                 <li class="nk-menu-item has-sub">
@@ -141,12 +139,48 @@
                                         <li class="nk-menu-item">
                                             <a href="{{ url('admin-dashboard/releasecategory') }}" class="nk-menu-link"><span class="nk-menu-text">Release Category</span></a>
                                         </li>
-                                        <!-- <li class="nk-menu-item">
-                                            <a href="{{ url('admin-dashboard/packagebundle') }}" class="nk-menu-link"><span class="nk-menu-text">Package Bundle</span></a>
-                                        </li> -->
-                                       
+                                        <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/pressrelease') }}" class="nk-menu-link"><span class="nk-menu-text">Press Release</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/pressreleaselist') }}" class="nk-menu-link"><span class="nk-menu-text">Press Release List</span></a>
+                                        </li>
                                     </ul> <!-- .nk-menu-sub -->
-                                </li>              
+                                </li>
+                                <li class="nk-menu-item has-sub">
+                                    <a href="" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-tile-thumb"></em></span>
+                                        <span class="nk-menu-text">Other Services</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/servicecategory') }}" class="nk-menu-link"><span class="nk-menu-text">Service Category</span></a>
+                                        </li>
+                                        <li class="nk-menu-item"> 
+                                            <a href="{{ url('admin-dashboard/otherservices') }}" class="nk-menu-link"><span class="nk-menu-text">Other Services</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/otherserviceslist') }}" class="nk-menu-link"><span class="nk-menu-text">Other Services List</span></a>
+                                        </li> 
+                                    </ul> <!-- .nk-menu-sub -->
+                                </li>   
+                                <li class="nk-menu-item has-sub">
+                                    <a href="" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-tile-thumb"></em></span>
+                                        <span class="nk-menu-text">Site Meta</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/sitemeta') }}" class="nk-menu-link"><span class="nk-menu-text">Site Meta</span></a>
+                                        </li>
+                                        <li class="nk-menu-item"> 
+                                            <a href="{{ url('admin-dashboard/sitemetalist') }}" class="nk-menu-link"><span class="nk-menu-text">Site Meta List</span></a>
+                                        </li>
+                                        <!-- <li class="nk-menu-item">
+                                            <a href="{{ url('admin-dashboard/otherserviceslist') }}" class="nk-menu-link"><span class="nk-menu-text">Other Services List</span></a>
+                                        </li>   -->
+                                    </ul> <!-- .nk-menu-sub -->
+                                </li>             
                             </ul>  
                         </div><!-- .nk-sidebar-menu -->
                     </div><!-- .nk-sidebar-content -->

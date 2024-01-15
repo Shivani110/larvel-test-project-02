@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Publications;
@@ -10,6 +11,11 @@ use App\Models\Country;
 use App\Models\ArticleType;
 use App\Models\PackageBundle;
 use App\Models\Category;
+use App\Models\ReleaseCategory;
+use App\Models\PressRelease;
+use App\Models\ServicesCategory;
+use App\Models\OtherService;
+use App\Models\SiteMeta;
 
 class PublicationController extends Controller
 {
@@ -19,8 +25,12 @@ class PublicationController extends Controller
         $countries = Country::all();
         $articles = ArticleType::all();
         $category = Category::all();
-        
-        return view('front.allPublications',compact('publications','genres','countries','articles','category'));
+        $releaseCategory = ReleaseCategory::all();
+        $pressRelease = PressRelease::all();
+        $servicecategory = ServicesCategory::all();
+        $sitemeta = SiteMeta::all();
+
+        return view('front.allPublications',compact('publications','genres','countries','articles','category','releaseCategory','pressRelease','servicecategory','sitemeta'));
     }
     
     public function publicationName(Request $request){

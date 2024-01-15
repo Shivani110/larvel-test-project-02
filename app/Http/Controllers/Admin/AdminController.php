@@ -14,6 +14,10 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\PackageBundle;
 use App\Models\ReleaseCategory;
+use App\Models\PressRelease;
+use App\Models\ServicesCategory;
+use App\Models\OtherService;
+use App\Models\SiteMeta;
 use Hash;
 
 class AdminController extends Controller
@@ -552,8 +556,8 @@ class AdminController extends Controller
         $package->price = $request->price;
         $package->retail_price = $request->retail_price;
         $package->category = $request->category;
-        $package->publications = $request->publication;
-        $package->save();
+        $package->publications = json_encode($request->publication);
+        $package->update();
 
         return back()->with("success","Package Bundle Updated Successfully");
     }
@@ -605,5 +609,214 @@ class AdminController extends Controller
             $status = "add";
         }
         return response()->json([$category,$status]);
+    }
+
+    public function deleteReleaseCategory(Request $request){
+        $id = $request->id;
+        $category = ReleaseCategory::where('id','=',$id)->delete();
+
+        return response()->json($category);
+    }
+
+    public function pressRelease(){
+        return view('admin.pressrelease');
+    }
+
+    public function createPressrelease(Request $request){
+        $request->validate([
+            'price' => 'required',
+            'description' => 'required',
+        ]);
+
+        $pressRelease = new PressRelease;
+        $pressRelease->price = $request->price;
+        $pressRelease->description = $request->description;
+        $pressRelease->save();
+
+        return back()->with("success","Press Release Added Successfully");
+    }
+
+    public function getPressrelease(){
+        $pressRelease = PressRelease::all();
+        return view('admin.pressreleaselist',compact('pressRelease'));
+    }
+
+    public function editPress($id){
+        $pressRelease = PressRelease::where('id','=',$id)->first();
+        return view('admin.pressrelease',compact('pressRelease'));
+    }
+
+    public function updatePress(Request $request){
+        if($request->id){
+            $id = $request->id;
+            $pressRelease = PressRelease::where('id','=',$id)->first();
+            $pressRelease->price = $request->price;
+            $pressRelease->description = $request->description;
+            $pressRelease->update();
+        }
+    
+        return back()->with("success","Press Release Updated Successfully");
+    }
+
+    public function deletePress(Request $request){
+        $id = $request->id;
+        $pressRelease = PressRelease::where('id','=',$id)->delete();
+
+        return response()->json($pressRelease);
+    }
+
+    public function serviceCategory(){
+        $servicecategory = ServicesCategory::all();
+        return view('admin.servicecategory',compact('servicecategory'));
+    }
+
+    public function createServiceCategory(Request $request){
+        if($request->id){
+            $request->validate([
+                'categoryname' => 'required',
+            ]);
+    
+            $name = $request->categoryname;
+            $slug = trim($name);
+            $slug= preg_replace('/[^a-zA-Z0-9 -]/','',$slug);
+            $slug= str_replace(' ','-', $slug);
+            $slug= strtolower($slug);
+           
+            $category = ServicesCategory::where('id','=',$request->id)->first();
+            $category->category_name = $name;
+            $category->slug = $slug;
+            $category->update();
+
+            $status = "edit";
+        }else{
+            $request->validate([
+                'categoryname' => 'required|unique:categories,category_name',
+            ]);
+
+            $name = $request->categoryname;
+            $slug = trim($name);
+            $slug= preg_replace('/[^a-zA-Z0-9 -]/','',$slug );
+            $slug= str_replace(' ','-', $slug);
+            $slug= strtolower($slug);
+
+            $category = new ServicesCategory;
+            $category->category_name = $name;
+            $category->slug = $slug;
+            $category->save();
+            $status = "add";
+        }
+        return response()->json([$category,$status]);
+    }
+
+    public function deleteServiceCategory(Request $request){
+        $id = $request->id;
+        $category = ServicesCategory::where('id','=',$id)->delete();
+
+        return response()->json($category);
+    }
+
+    public function otherservices(){
+        $category = ServicesCategory::all();
+        $publication = Publications::all();
+
+        return view('admin.otherservices',compact('category','publication'));
+    }
+
+    public function createservices(Request $request){
+        $request->validate([
+            'title' => 'required',
+            'category' => 'required',
+            'publication' => 'required',
+        ]);
+
+        $otherservice = new OtherService;
+        $otherservice->title = $request->title;
+        $otherservice->category = $request->category;
+        $otherservice->publication = json_encode($request->publication);
+        $otherservice->save();
+
+        return back()->with('success','Other Services Created Successfully');
+    }
+
+    public function getOtherServices(){
+        $service = OtherService::all();
+        return view('admin.otherserviceslist',compact('service'));
+    }
+
+    public function editServices($id){
+        $otherservice = OtherService::where('id','=',$id)->first();
+        $category = ServicesCategory::all();
+        $publication = Publications::all();
+
+        return view('admin.otherservices',compact('otherservice','category','publication'));
+    }
+
+    public function updateServices(Request $request){
+        if($request->id){
+            $id = $request->id;
+
+            $otherservice = OtherService::where('id','=',$id)->first();
+
+            $otherservice->title = $request->title;
+            $otherservice->category = $request->category;
+            $otherservice->publication = json_encode($request->publication);
+            $otherservice->update();
+        }
+        return back()->with("success","Other Services Updated Successfully");
+    }
+
+    public function deleteServices(Request $request){
+       $id = $request->id;
+       $otherservice = OtherService::where('id','=',$id)->delete();
+
+       return response()->json($otherservice);
+    }
+
+    public function siteMeta(){
+        return view('admin.sitemeta');
+    }
+
+    public function createSiteMeta(Request $request){
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+        ]);
+
+        $site = new SiteMeta;
+        $site->title = $request->title;
+        $site->description = $request->description;
+        $site->save();
+
+        return back()->with("success","Site Meta Created Successfully");
+    }
+
+    public function getsiteMeta(){
+        $site = SiteMeta::all();
+
+        return view('admin.sitemetalist',compact('site'));
+    }
+
+    public function editsiteMeta($id){
+        $sitemeta = SiteMeta::where('id','=',$id)->first();
+
+        return view('admin.sitemeta',compact('sitemeta'));
+    }
+
+    public function updatesiteMeta(Request $request){
+        if($request->id){
+            $id = $request->id;
+            $sitemeta = SiteMeta::where('id','=',$id)->first();
+            $sitemeta->title = $request->title;
+            $sitemeta->description = $request->description;
+            $sitemeta->update();
+        }
+        return back()->with("success","Site Meta Updated Successfully");
+    }
+
+    public function deletesiteMeta(Request $request){
+        $id = $request->id;
+        $sitemeta = SiteMeta::where('id','=',$id)->delete();
+
+        return response()->json($sitemeta);
     }
 }

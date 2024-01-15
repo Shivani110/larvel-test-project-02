@@ -345,16 +345,16 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" name="id" id="id" value="{{ $packageBundle->id ?? ''}}">
-                        <div class="row g-3">
-                            <div class="col-lg-7 offset-lg-5">
-                                <div class="form-group mt-2">
-                                @if(isset($packageBundle))
-                                    <button type="submit" class="btn btn-lg btn-primary">Update Package Bundle</button>
-                                @else
-                                    <button type="submit" class="btn btn-lg btn-primary">Add Package Bundle</button>
-                                @endif
-                                </div>
+                    </div>
+                    <input type="hidden" name="id" id="id" value="{{ $packageBundle->id ?? ''}}">
+                    <div class="row g-3">
+                        <div class="col-lg-7 offset-lg-5">
+                            <div class="form-group mt-2">
+                            @if(isset($packageBundle))
+                                <button type="submit" class="btn btn-lg btn-primary">Update Package Bundle</button>
+                            @else
+                                <button type="submit" class="btn btn-lg btn-primary">Add Package Bundle</button>
+                            @endif
                             </div>
                         </div>
                     </div>
@@ -415,7 +415,6 @@
             this.checked = false;
         });
     }
-
 
 </script>
 

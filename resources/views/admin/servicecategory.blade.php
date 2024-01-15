@@ -10,7 +10,7 @@
                     <div class="nk-block nk-block-lg">
                         <div class="nk-block-head">
                             <div class="nk-block-head-content">
-                                <h4 class="title nk-block-title">Press Release Category</h4>
+                                <h4 class="title nk-block-title">Other Services Category</h4>
                             </div>
                         </div>
                         <div class="card card-bordered card-preview">
@@ -50,7 +50,7 @@
                                 </thead>
                                 <tbody>  
                                     <?php $i=1; ?>   
-                                    @foreach($category as $data)
+                                    @foreach($servicecategory as $data)
                                     <tr class="tb-tnx-item" id="category{{ $data->id }}">
                                         <td class="tb-tnx-id">
                                             <a href="#"><span>{{ $i++ }}</span></a>
@@ -93,7 +93,7 @@
                 _token: "{{ csrf_token() }}"
             }
             $.ajax({
-                url:"{{ url('admin-dashboard/category') }}",
+                url:"{{ url('admin-dashboard/createservicecategory') }}",
                 type:"POST",
                 data:data,
                 dataType:"JSON",
@@ -146,7 +146,7 @@
             _token: "{{ csrf_token() }}"
         }
         $.ajax({
-            url: "{{ url('admin-dashboard/deletereleasecategory') }}",
+            url: "{{ url('admin-dashboard/deleteservicecategory') }}",
             type: "POST",
             data: data,
             dataType: "JSON",
@@ -160,4 +160,4 @@
 
 </script>
 
-@endsection
+@endsection 

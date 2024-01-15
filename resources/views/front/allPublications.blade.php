@@ -39,10 +39,8 @@
                 <div class="col-lg-12">
                     <div class="pricing_content">
                         <div class="pricing_text">
-                            <h2>Pricing Sheet (PR-Partners)</h2>
-                            <p>
-                                Once we have published the article for you, any further edits may include an extra charge.
-                            </p>
+                            <h2>{{ $sitemeta[0]->title }}</h2>
+                            {{ $sitemeta[0]->description }}
                         </div>
                         <div class="ques_btn">
                             <a class="btn" href="javascript:void(0)" role="button">Download PR Questionnaire</a>
@@ -51,7 +49,10 @@
                     <div class="tab_btn">
                         <ul class="nav nav-pills" id="pills-tab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">All Publication</a>
+                                <a class="nav-link active" id="pills-most-popular-tab" data-toggle="pill" href="#pills-most-popular" role="tab" aria-controls="pills-home" aria-selected="true">Most Popular</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">All Publication</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Press Packages</a>
@@ -66,7 +67,122 @@
                     </div>
                     <div class="tab_wrapper">
                         <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <div class="tab-pane fade show active" id="pills-most-popular" role="tabpanel" aria-labelledby="pills-most-popular-tab">
+                                <div class="rightside_publication">
+                                    <div class="publication_content most_popular">
+                                        <div class="publications_show" id="publicationTable">
+                                            <?php $total = count($publications); ?>
+                                            <span>Showing {{ $total }} of {{ $total }} publications</span>
+                                        
+                                            <div class="overview_company" id="overview_tab">
+                                                <div class="spinner_wreap d-none">
+                                                    <div id="mySpinner" class="dots-bars-4"></div>
+                                                </div>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-left">Publication</th>
+                                                            <th>Genres</th>
+                                                            <th>Price</th>
+                                                            <th>DA
+                                                                <div class="tooltip"><i class="fa-regular fa-circle-question"></i>
+                                                                    <p class="tooltiptext">
+                                                                    <span>Domain authority</span><br>
+                                                                    Search engine ranking score (1-100)
+                                                                    </p>
+                                                                </div>
+                                                            </th>
+                                                            <th>TAT
+                                                                <div class="tooltip"><i class="fa-regular fa-circle-question"></i>
+                                                                    <p class="tooltiptext">
+                                                                    <span>Time at arrival</span><br>
+                                                                    Estimated time to deliver
+                                                                    </p>
+                                                                </div>
+                                                            </th>
+                                                            <th>Article Type</th>
+                                                            <th>Country/Region</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($publications as $data)
+                                                        <tr>
+                                                            <td class="cpy_content">
+                                                                <div class="cpy_logo">
+                                                                    <div class="cpy_logo_img">
+                                                                        <img src="{{ $data->image }}" alt="" class="img-fluid">
+                                                                    </div>
+                                                                    <span>
+                                                                        <a href="{{ $data->url }}">{{ $data->title}}</a>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <?php 
+                                                                    if($data->genres ?? ''){
+                                                                        $genress = json_decode($data->genres);
+                                                                        if(count($genress)>1){ ?>
+                                                                            <div class="tooltip tooltip_data">{{ count($genress) }}genres <i class="fa-regular fa-circle-question"></i>
+                                                                                <ul class="tooltiptext">
+                                                                                <?php 
+                                                                                    foreach($genress as $gnr){
+                                                                                        $genree = (App\Models\Genre::where('id','=',$gnr)->first()); ?>
+                                                                                            <li>{{ $genree->genre_name }}</li>
+                                                                                    <?php     
+                                                                                        }
+                                                                                    ?>
+                                                                                </ul>
+                                                                            </div> 
+                                                                <?php   }else{ ?>
+                                                                            <?php 
+                                                                                $genress = json_decode($data->genres);
+                                                                                foreach($genress as $gnr){
+                                                                                    $genree = (App\Models\Genre::where('id','=',$gnr)->first()); ?>
+                                                                                    {{ $genree->genre_name }}
+                                                                                <?php     
+                                                                                    }
+                                                                                ?>
+                                                                    <?php   }
+                                                                        }
+                                                                    ?>
+                                                            </td>
+                                                            <td>
+                                                                <?php 
+                                                                    if($data->price == 0){
+                                                                        print_r('ASK');
+                                                                    }else{ ?>
+                                                                        ${{ number_format($data->price, 2) }} 
+                                                                        <!-- ${{ $data->price }} -->
+                                                                <?php    
+                                                                    }
+                                                                ?>
+                                                            </td>
+                                                            <td>{{ $data->turn_around_time }}</td>
+                                                            <td>{{ $data->domain_authority }}</td>
+                                                            <td>
+                                                                <?php 
+                                                                    $articleS = $data->article_type;
+                                                                    $articleTypes = (App\Models\ArticleType::where('id','=',$articleS)->first());
+                                                                    print_r($articleTypes->article_type);    
+                                                                ?>
+                                                            </td>
+                                                            <td>
+                                                                <?php 
+                                                                    $countrY = $data->country;
+                                                                    $countrieS = (App\Models\Country::where('id','=',$countrY)->first());
+                                                                    print_r($countrieS->country_name);
+                                                                ?>
+                                                            </td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                                 <div class="publication_content">
                                     <div class="leftside_rang">
                                         <form>
@@ -182,7 +298,7 @@
                                                                 if($data->genres ?? ''){
                                                                     $genres = json_decode($data->genres);
                                                                     if(count($genres)>1){ ?>
-                                                                        <div class="tooltip tooltip_data"><i class="fa-regular fa-circle-question"></i>
+                                                                        <div class="tooltip tooltip_data">{{ count($genres) }}genres<i class="fa-regular fa-circle-question"></i>
                                                                             <ul class="tooltiptext">
                                                                             <?php 
                                                                                 $genres = json_decode($data->genres);
@@ -213,7 +329,6 @@
                                                                     print_r('ASK');
                                                                 }else{ ?>
                                                                     ${{ number_format($data->price, 2) }} 
-                                                                    <!-- ${{ $data->price }} -->
                                                         <?php    }
                                                                     
                                                             ?>
@@ -284,78 +399,52 @@
                             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                                 <div class="business_wrapper">
                                     <div class="business_content">
-                                        <h3>Publications</h3>
+                                        @foreach($releaseCategory as $cat)
+                                        <h3>
+                                           {{ $cat->category_name }}
+                                        </h3>
+                                        @endforeach
                                         <div class="business_grid">
+                                            @foreach($pressRelease as $press)
                                             <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Price</span> <span class="business_price">$600</span></h4>
-                                                <p>8 Yahoo sites with Yahoo finance and News</p>
+                                                <h4 class="bundle_text"><span>Price</span> <span class="business_price">${{ number_format($press->price, 2) }}</span></h4>
+                                                {{ $press->description }}
                                             </div>
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Price</span> <span class="business_price">$800</span></h4>
-                                                <p>20+ Yahoo sites, Benzinga, Morning watch, Digital journal, Market watch, Street insider</p>
-                                            </div>
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Price</span> <span class="business_price">$600</span></h4>
-                                                <p>8 Yahoo sites with Yahoo finance and News</p>
-                                            </div>
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Price</span> <span class="business_price">$600</span></h4>
-                                                <p>8 Yahoo sites with Yahoo finance and News</p>
-                                            </div>
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Price</span> <span class="business_price">$600</span></h4>
-                                                <p>8 Yahoo sites with Yahoo finance and News</p>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="pills-services" role="tabpanel" aria-labelledby="pills-services-tab">
                                 <div class="business_wrapper">
+                                    @foreach($servicecategory as $scatg)
                                     <div class="business_content">
-                                        <h3>Other Services</h3>
+                                        <h3>{{ $scatg->category_name }}</h3>
+                                        <?php 
+                                            $otherService = (App\Models\ServicesCategory::where('id','=',$scatg->id)->with('otherservice')->first());
+                                        ?>
                                         <div class="business_grid">
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>PR services</span></h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
+                                            @foreach($otherService->otherservice as $service)
+                                                <div class="business_wreap">
+                                                    <h4 class="bundle_text"><span>{{ $service->title }}</span></h4>
+                                                    <div class="business_list">
+                                                        <h5>Publication</h5>
+                                                        <ul class="m-0">
+                                                        <?php     
+                                                            $puId = json_decode($service->publication); 
+                                                            foreach($puId as $puID){
+                                                                $pulictns = (App\Models\Publications::where('id','=',$puID)->first()); ?>
+                                                                <li>{{ $pulictns->title }}</li>
+                                                        <?php   
+                                                            }
+                                                        ?>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Social media services</span></h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="business_wreap">
-                                                <h4 class="bundle_text"><span>Other services</span></h4>
-                                                <div class="business_list">
-                                                    <h5>Publication</h5>
-                                                    <ul class="m-0">
-                                                        <li>LA Weekly</li>
-                                                        <li>IB Times (SG)</li>
-                                                        <li>Digital Journal</li>
-                                                        <li>NY Weekly</li>
-                                                        <li>Daily Scanner</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

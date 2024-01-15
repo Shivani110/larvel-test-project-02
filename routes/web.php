@@ -65,6 +65,28 @@ Route::group(['middleware'=>['admin']],function(){
     Route::post('/admin-dashboard/deletebundle',[AdminController::class,'deletePackage']);
     Route::get('/admin-dashboard/releasecategory',[AdminController::class,'releaseCategory']);
     Route::post('/admin-dashboard/category',[AdminController::class,'createCategory']);
+    Route::post('/admin-dashboard/deletereleasecategory',[AdminController::class,'deleteReleaseCategory']);
+    Route::get('/admin-dashboard/pressrelease',[AdminController::class,'pressRelease']);
+    Route::post('/admin-dashboard/createpressrelease',[AdminController::class,'createPressrelease']);
+    Route::get('/admin-dashboard/pressreleaselist',[AdminController::class,'getPressrelease']);
+    Route::get('/admin-dashboard/pressrelease/{id}',[AdminController::class,'editPress']);
+    Route::post('/admin-dashboard/updatepressrelease',[AdminController::class,'updatePress']);
+    Route::post('/admin-dashboard/deletepressrelease',[AdminController::class,'deletePress']);
+    Route::get('/admin-dashboard/servicecategory',[AdminController::class,'serviceCategory']);
+    Route::post('/admin-dashboard/createservicecategory',[AdminController::class,'createServiceCategory']);
+    Route::post('/admin-dashboard/deleteservicecategory',[AdminController::class,'deleteServiceCategory']);
+    Route::get('/admin-dashboard/otherservices',[AdminController::class,'otherservices']);
+    Route::post('/admin-dashboard/createservices',[AdminController::class,'createservices']);
+    Route::get('/admin-dashboard/otherserviceslist',[AdminController::class,'getOtherServices']);
+    Route::get('/admin-dashboard/otherservices/{id}',[AdminController::class,'editServices']);
+    Route::post('/admin-dashboard/updateservices',[AdminController::class,'updateServices']);
+    Route::post('/admin-dashboard/deleteservices',[AdminController::class,'deleteServices']);
+    Route::get('/admin-dashboard/sitemeta',[AdminController::class,'siteMeta']);
+    Route::post('/admin-dashboard/createsite',[AdminController::class,'createSiteMeta']);
+    Route::get('/admin-dashboard/sitemetalist',[AdminController::class,'getsiteMeta']);
+    Route::get('/admin-dashboard/sitemeta/{id}',[AdminController::class,'editsiteMeta']);
+    Route::post('/admin-dashboard/updatesitemeta',[AdminController::class,'updatesiteMeta']);
+    Route::post('/admin-dashboard/deletesitemeta',[AdminController::class,'deletesiteMeta']);
 });
 
 Route::group(['middleware'=>['publication']],function(){
