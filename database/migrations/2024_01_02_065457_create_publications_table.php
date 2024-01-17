@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('article_type');
             $table->string('country');
             $table->text('image');
+            $table->integer('mostpopular')->default('0');
             $table->timestamps();
         });
     }

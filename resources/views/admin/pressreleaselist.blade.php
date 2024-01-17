@@ -10,6 +10,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Description</th>
                 <th scope="col">Price</th>
+                <th scope="col">Category</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -20,6 +21,16 @@
                 <td>{{ $i++ }}</td>
                 <td>{{ $data->description }}</td>
                 <td>${{ number_format($data->price,2) }}</td>
+                <td>
+                    @if($data->category ?? '')
+                        <?php 
+                            $c_id = $data->category;
+                            $releaseCategory = (App\Models\ReleaseCategory::where('id','=',$c_id)->first());
+
+                            print_r($releaseCategory->category_name);
+                        ?>
+                    @endif
+                </td>
                 <td>
                     <a href="{{ url('admin-dashboard/pressrelease/'.$data->id) }}" class="btn btn-primary">Edit</a>
                     <button type="button" class="btn btn-danger" onclick="deletePress({{$data->id}})">Delete</button>

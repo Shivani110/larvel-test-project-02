@@ -83,13 +83,11 @@ Route::group(['middleware'=>['admin']],function(){
     Route::post('/admin-dashboard/deleteservices',[AdminController::class,'deleteServices']);
     Route::get('/admin-dashboard/sitemeta',[AdminController::class,'siteMeta']);
     Route::post('/admin-dashboard/createsite',[AdminController::class,'createSiteMeta']);
-    Route::get('/admin-dashboard/sitemetalist',[AdminController::class,'getsiteMeta']);
-    Route::get('/admin-dashboard/sitemeta/{id}',[AdminController::class,'editsiteMeta']);
-    Route::post('/admin-dashboard/updatesitemeta',[AdminController::class,'updatesiteMeta']);
-    Route::post('/admin-dashboard/deletesitemeta',[AdminController::class,'deletesiteMeta']);
+    Route::post('/admin-dashboard/popular',[AdminController::class,'updateMostpopular']);
 });
 
 Route::group(['middleware'=>['publication']],function(){
     Route::get('/publications',[PublicationController::class,'allpublications']);
     Route::post('/publicationname',[PublicationController::class,'publicationName']);
+    Route::get('/download',[PublicationController::class,'download']);
 });

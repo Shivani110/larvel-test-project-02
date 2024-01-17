@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -26,15 +27,17 @@ class PublicationController extends Controller
         $articles = ArticleType::all();
         $category = Category::all();
         $releaseCategory = ReleaseCategory::all();
-        $pressRelease = PressRelease::all();
         $servicecategory = ServicesCategory::all();
         $sitemeta = SiteMeta::all();
+        $popular = Publications::where('mostpopular','=','1')->get();
 
-        return view('front.allPublications',compact('publications','genres','countries','articles','category','releaseCategory','pressRelease','servicecategory','sitemeta'));
+        return view('front.allPublications',compact('publications','genres','countries','articles','category','releaseCategory','servicecategory','sitemeta','popular'));
     }
     
     public function publicationName(Request $request){
-        $query = Publications::with('articleType','country');
+        $query = Publications::with('articleType','country','genre');
+
+
         $publicationName = $request->name;
 
         if($publicationName !== null){
@@ -83,26 +86,35 @@ class PublicationController extends Controller
         }elseif($maxprice !== null){
             $query->where('price','<=',$maxprice);
         }
-
+        
         $results = $query->get();
+       
+        // return $results;
+        // die();
 
-        $publication = [];
-
-        foreach($results as $data){
-            $genres = json_decode($data->genres);
-            $genresdata = [];
-            foreach($genres as $gen){
-                $genreS = Genre::where('id','=',$gen)->first();
-                array_push($genresdata,$genreS);
-            }
-            array_push($publication,$genresdata);
-        }
+        // $publication = [];
+        
+        // foreach($results as $data){
+        //     $genres = json_decode($data->genres);
+        //     // $genreS = Genre::whereIn('id', $genres)->get();
+        //     $genreS = Genre::findMany($genres);
+        //     array_push($publication,$genreS);       
+        // }
 
         $publications = Publications::all();
         $total = count($publications);
 
-        $array = array($results,$publication,$total);
+        $array = array($results,$total);
 
         return response()->json($array);
+    }
+
+    public function download(){
+        $file = SiteMeta::first()->questionnaire;
+        $path = public_path('files/'.$file);
+        $extension = File::extension(public_path('files/'.$file));
+
+        $filename = time().'.'.$extension;
+        return response()->download($path,$filename);
     }
 }

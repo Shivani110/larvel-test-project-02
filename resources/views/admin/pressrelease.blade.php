@@ -57,6 +57,38 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row g-3 align-center">
+                        <div class="col-lg-5">
+                            <div class="form-group">
+                                <label class="form-label" for="category">Category</label>
+                                <span class="form-note">Please select the Category of your Press Release.</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            @if($pressRelease ?? '')
+                                @foreach($category as $ctg)
+                                    @if($pressRelease->category == $ctg->id)
+                                    <div class="custom-control custom-control-sm custom-radio">
+                                        <input type="radio" class="custom-control-input" name="category" id="category{{ $ctg->id ?? ''}}" value="{{ $ctg->id ?? '' }}" checked>
+                                        <label class="custom-control-label" for="category{{ $ctg->id ?? '' }}">{{ $ctg->category_name ?? ''}}</label>
+                                    </div>
+                                    @else
+                                    <div class="custom-control custom-control-sm custom-radio">
+                                        <input type="radio" class="custom-control-input" name="category" id="category{{ $ctg->id ?? ''}}" value="{{ $ctg->id ?? '' }}">
+                                        <label class="custom-control-label" for="category{{ $ctg->id ?? '' }}">{{ $ctg->category_name ?? ''}}</label>
+                                    </div>
+                                    @endif
+                                @endforeach
+                            @else
+                                @foreach($category as $ctg)
+                                    <div class="custom-control custom-control-sm custom-radio">
+                                        <input type="radio" class="custom-control-input" name="category" id="category{{ $ctg->id ?? ''}}" value="{{ $ctg->id ?? '' }}">
+                                        <label class="custom-control-label" for="category{{ $ctg->id ?? '' }}">{{ $ctg->category_name ?? ''}}</label>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
                     <input type="hidden" name="id" id="id" value="{{ $pressRelease->id ?? '' }}">
                     <div class="row g-3">
                         <div class="col-lg-7 offset-lg-5">

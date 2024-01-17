@@ -386,7 +386,7 @@
                 data: data,
                 dataType:"JSON",
                 success:function(response){
-                    console.log(response);
+                    // console.log(response);
                     if(response){
                         title = response.title;
                         html = '<div id="pub'+response.id+'"><input type="text" name="pname" id="pname'+response.id+'" value="'+title+'"><button type="button" onclick="remove(id='+response.id+')">X</button></div>';

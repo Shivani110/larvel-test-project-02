@@ -10,7 +10,7 @@ class Publications extends Model
     use HasFactory;
 
     public function genre(){
-        return $this->hasMany(Genre::class,'id','genres');
+        return $this->hasMany(Genre::class,'status','status');
     } 
 
     public function articleType(){

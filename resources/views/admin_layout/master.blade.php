@@ -173,14 +173,8 @@
                                         <li class="nk-menu-item">
                                             <a href="{{ url('admin-dashboard/sitemeta') }}" class="nk-menu-link"><span class="nk-menu-text">Site Meta</span></a>
                                         </li>
-                                        <li class="nk-menu-item"> 
-                                            <a href="{{ url('admin-dashboard/sitemetalist') }}" class="nk-menu-link"><span class="nk-menu-text">Site Meta List</span></a>
-                                        </li>
-                                        <!-- <li class="nk-menu-item">
-                                            <a href="{{ url('admin-dashboard/otherserviceslist') }}" class="nk-menu-link"><span class="nk-menu-text">Other Services List</span></a>
-                                        </li>   -->
                                     </ul> <!-- .nk-menu-sub -->
-                                </li>             
+                                </li>         
                             </ul>  
                         </div><!-- .nk-sidebar-menu -->
                     </div><!-- .nk-sidebar-content -->

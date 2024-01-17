@@ -618,19 +618,23 @@ class AdminController extends Controller
         return response()->json($category);
     }
 
+
     public function pressRelease(){
-        return view('admin.pressrelease');
+        $category = ReleaseCategory::all();
+        return view('admin.pressrelease',compact('category'));
     }
 
     public function createPressrelease(Request $request){
         $request->validate([
             'price' => 'required',
             'description' => 'required',
+            'category' => 'required',
         ]);
 
         $pressRelease = new PressRelease;
         $pressRelease->price = $request->price;
         $pressRelease->description = $request->description;
+        $pressRelease->category = $request->category;
         $pressRelease->save();
 
         return back()->with("success","Press Release Added Successfully");
@@ -643,7 +647,9 @@ class AdminController extends Controller
 
     public function editPress($id){
         $pressRelease = PressRelease::where('id','=',$id)->first();
-        return view('admin.pressrelease',compact('pressRelease'));
+        $category = ReleaseCategory::all();
+
+        return view('admin.pressrelease',compact('pressRelease','category'));
     }
 
     public function updatePress(Request $request){
@@ -652,6 +658,7 @@ class AdminController extends Controller
             $pressRelease = PressRelease::where('id','=',$id)->first();
             $pressRelease->price = $request->price;
             $pressRelease->description = $request->description;
+            $pressRelease->category = $request->category;
             $pressRelease->update();
         }
     
@@ -780,43 +787,33 @@ class AdminController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
+            'file' => 'required',
         ]);
 
-        $site = new SiteMeta;
+        if($request->hasFile('file')){
+            $file = $request->file('file');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time().'.'.$extension;
+            $file->move(public_path('files'), $filename);
+        }
+    
+        $site = SiteMeta::where('id','=','1')->first();
+
         $site->title = $request->title;
         $site->description = $request->description;
-        $site->save();
+        $site->questionnaire = $filename;
+        $site->update(); 
 
-        return back()->with("success","Site Meta Created Successfully");
-    }
-
-    public function getsiteMeta(){
-        $site = SiteMeta::all();
-
-        return view('admin.sitemetalist',compact('site'));
-    }
-
-    public function editsiteMeta($id){
-        $sitemeta = SiteMeta::where('id','=',$id)->first();
-
-        return view('admin.sitemeta',compact('sitemeta'));
-    }
-
-    public function updatesiteMeta(Request $request){
-        if($request->id){
-            $id = $request->id;
-            $sitemeta = SiteMeta::where('id','=',$id)->first();
-            $sitemeta->title = $request->title;
-            $sitemeta->description = $request->description;
-            $sitemeta->update();
-        }
         return back()->with("success","Site Meta Updated Successfully");
     }
 
-    public function deletesiteMeta(Request $request){
-        $id = $request->id;
-        $sitemeta = SiteMeta::where('id','=',$id)->delete();
+    public function updateMostpopular(Request $request){
+       $id = $request->id;
+       $publication = Publications::where('id','=',$id)->first();
+       $publication->mostpopular = '1';
+       $publication->update();
 
-        return response()->json($sitemeta);
+       return response()->json($publication);
     }
+
 }

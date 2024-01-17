@@ -43,8 +43,8 @@
                             {{ $sitemeta[0]->description }}
                         </div>
                         <div class="ques_btn">
-                            <a class="btn" href="javascript:void(0)" role="button">Download PR Questionnaire</a>
-                        </div>
+                            <a href="{{ url('download') }}" class="btn" id="dwnld" role="button">Download PR Questionnaire</a>
+                        </div> 
                     </div>
                     <div class="tab_btn">
                         <ul class="nav nav-pills" id="pills-tab" role="tablist">
@@ -69,9 +69,9 @@
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-most-popular" role="tabpanel" aria-labelledby="pills-most-popular-tab">
                                 <div class="rightside_publication">
-                                    <div class="publication_content most_popular">
+                                    <div class="publication_contents most_popular">
                                         <div class="publications_show" id="publicationTable">
-                                            <?php $total = count($publications); ?>
+                                            <?php $total = count($popular); ?>
                                             <span>Showing {{ $total }} of {{ $total }} publications</span>
                                         
                                             <div class="overview_company" id="overview_tab">
@@ -81,10 +81,10 @@
                                                 <table>
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-left">Publication</th>
+                                                            <th class="text-left ">Publication</th>
                                                             <th>Genres</th>
                                                             <th>Price</th>
-                                                            <th>DA
+                                                            <th class='d-flex'>DA
                                                                 <div class="tooltip"><i class="fa-regular fa-circle-question"></i>
                                                                     <p class="tooltiptext">
                                                                     <span>Domain authority</span><br>
@@ -105,22 +105,22 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach($publications as $data)
+                                                        @foreach($popular as $pop)
                                                         <tr>
                                                             <td class="cpy_content">
                                                                 <div class="cpy_logo">
                                                                     <div class="cpy_logo_img">
-                                                                        <img src="{{ $data->image }}" alt="" class="img-fluid">
+                                                                        <img src="{{ $pop->image }}" alt="" class="img-fluid">
                                                                     </div>
                                                                     <span>
-                                                                        <a href="{{ $data->url }}">{{ $data->title}}</a>
+                                                                        <a href="{{ $pop->url }}">{{ $pop->title}}</a>
                                                                     </span>
                                                                 </div>
                                                             </td>
                                                             <td>
                                                                 <?php 
-                                                                    if($data->genres ?? ''){
-                                                                        $genress = json_decode($data->genres);
+                                                                    if($pop->genres ?? ''){
+                                                                        $genress = json_decode($pop->genres);
                                                                         if(count($genress)>1){ ?>
                                                                             <div class="tooltip tooltip_data">{{ count($genress) }}genres <i class="fa-regular fa-circle-question"></i>
                                                                                 <ul class="tooltiptext">
@@ -135,7 +135,7 @@
                                                                             </div> 
                                                                 <?php   }else{ ?>
                                                                             <?php 
-                                                                                $genress = json_decode($data->genres);
+                                                                                $genress = json_decode($pop->genres);
                                                                                 foreach($genress as $gnr){
                                                                                     $genree = (App\Models\Genre::where('id','=',$gnr)->first()); ?>
                                                                                     {{ $genree->genre_name }}
@@ -148,27 +148,26 @@
                                                             </td>
                                                             <td>
                                                                 <?php 
-                                                                    if($data->price == 0){
+                                                                    if($pop->price == 0){
                                                                         print_r('ASK');
                                                                     }else{ ?>
-                                                                        ${{ number_format($data->price, 2) }} 
-                                                                        <!-- ${{ $data->price }} -->
+                                                                        ${{ number_format($pop->price, 2) }} 
                                                                 <?php    
                                                                     }
                                                                 ?>
                                                             </td>
-                                                            <td>{{ $data->turn_around_time }}</td>
-                                                            <td>{{ $data->domain_authority }}</td>
+                                                            <td>{{ $pop->turn_around_time }}</td>
+                                                            <td>{{ $pop->domain_authority }}</td>
                                                             <td>
                                                                 <?php 
-                                                                    $articleS = $data->article_type;
+                                                                    $articleS = $pop->article_type;
                                                                     $articleTypes = (App\Models\ArticleType::where('id','=',$articleS)->first());
                                                                     print_r($articleTypes->article_type);    
                                                                 ?>
                                                             </td>
                                                             <td>
                                                                 <?php 
-                                                                    $countrY = $data->country;
+                                                                    $countrY = $pop->country;
                                                                     $countrieS = (App\Models\Country::where('id','=',$countrY)->first());
                                                                     print_r($countrieS->country_name);
                                                                 ?>
@@ -249,28 +248,28 @@
                                         </form>
                                     </div>
                                     <div class="rightside_publication">
-                                        <div class="publications_show">
+                                        <div class="publications_show" id="show">
                                             <?php $total = count($publications); ?>
                                             <span>Showing {{ $total }} of {{ $total }} publications</span>
                                         </div>
-                                        <div class="overview_company">
+                                        <div class="overview_company all">
                                             <table>
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-left">Publication</th>
+                                                        <th class="text-left all">Publication</th>
                                                         <th>Genres</th>
                                                         <th>Price</th>
                                                         <th>DA
-                                                        <div class="tooltip"><i class="fa-regular fa-circle-question"></i>
-                                                            <p class="tooltiptext">
+                                                        <div class="tooltip all"><i class="fa-regular fa-circle-question all"></i>
+                                                            <p class="tooltiptext all">
                                                             <span>Domain authority</span><br>
                                                             Search engine ranking score (1-100)
                                                             </p>
                                                         </div>
                                                         </th>
                                                         <th>TAT
-                                                        <div class="tooltip"><i class="fa-regular fa-circle-question"></i>
-                                                            <p class="tooltiptext">
+                                                        <div class="tooltip all"><i class="fa-regular fa-circle-question all"></i>
+                                                            <p class="tooltiptext all">
                                                             <span>Time at arrival</span><br>
                                                             Estimated time to deliver
                                                             </p>
@@ -280,12 +279,12 @@
                                                         <th>Country/Region</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="allpub">
                                                     @foreach($publications as $data)
-                                                    <tr id="pub{{ $data->id }}">
-                                                        <td class="cpy_content">
-                                                            <div class="cpy_logo">
-                                                                <div class="cpy_logo_img">
+                                                    <tr>
+                                                        <td class="cpy_content all">
+                                                            <div class="cpy_logo all">
+                                                                <div class="cpy_logo_img all">
                                                                     <img src="{{ $data->image }}" class="img-fluid" alt="">
                                                                 </div>
                                                                 <span>
@@ -298,8 +297,8 @@
                                                                 if($data->genres ?? ''){
                                                                     $genres = json_decode($data->genres);
                                                                     if(count($genres)>1){ ?>
-                                                                        <div class="tooltip tooltip_data">{{ count($genres) }}genres<i class="fa-regular fa-circle-question"></i>
-                                                                            <ul class="tooltiptext">
+                                                                        <div class="tooltip tooltip_data all">{{ count($genres) }}genres<i class="fa-regular fa-circle-question all"></i>
+                                                                            <ul class="tooltiptext all">
                                                                             <?php 
                                                                                 $genres = json_decode($data->genres);
                                                                                 foreach($genres as $gen){
@@ -398,14 +397,16 @@
                             </div>
                             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                                 <div class="business_wrapper">
+                                    @foreach($releaseCategory as $cat)
                                     <div class="business_content">
-                                        @foreach($releaseCategory as $cat)
                                         <h3>
                                            {{ $cat->category_name }}
                                         </h3>
-                                        @endforeach
+                                        <?php 
+                                            $pressRelease = (App\Models\ReleaseCategory::where('id','=',$cat->id)->with('pressrelease')->first());
+                                        ?>
                                         <div class="business_grid">
-                                            @foreach($pressRelease as $press)
+                                            @foreach($pressRelease->pressrelease as $press)
                                             <div class="business_wreap">
                                                 <h4 class="bundle_text"><span>Price</span> <span class="business_price">${{ number_format($press->price, 2) }}</span></h4>
                                                 {{ $press->description }}
@@ -413,6 +414,7 @@
                                             @endforeach
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="pills-services" role="tabpanel" aria-labelledby="pills-services-tab">
@@ -495,7 +497,7 @@
             });
             noUiSlider.create(rangeSlider, {
                 start: [0, 30000],
-                step: 1,
+                step: 2,
                 range: {
                 min: [0],
                 max: [30000]
@@ -511,16 +513,13 @@
                 document.getElementsByName("min-value").value = moneyFormat.from(values[0]);
                 document.getElementsByName("max-value").value = moneyFormat.from(values[1]);
                 
-                $('#slider-range').click(function(){
-                    min = $('#slider-range-value1').html().replace('$','');
-                    max = $('#slider-range-value2').html().replace('$','');
-                    min_price = min.replace(',','');
-                    max_price = max.replace(',','');
-                    minprice = min_price;
-                    maxprice = max_price;
-
-                    publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
-                })
+                min = $('#slider-range-value1').html().replace('$','');
+                max = $('#slider-range-value2').html().replace('$','');
+                min_price = min.replace(',','');
+                max_price = max.replace(',','');
+                minprice = min_price;
+                maxprice = max_price;
+                publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
             });
 
             $('#exampleFormControlSelect1').change(function(){
@@ -580,52 +579,58 @@
                     data: data,
                     dataType: "JSON",
                     success: function(response){ 
-                        console.log(response);
                         data = [];
                         if(response[0] == "" || response[1] == ""){
                             var html1 = '<span>Nothing here...</span>' ;
-                            var total = response[2];
-                            $('.publications_show').html('<span>Showing 0 of '+total+' publications</span>');
+                            var total = response[1];
+                            $('#show').html('<span>Showing 0 of '+total+' publications</span>');
                             data.push(html1);
                         }else{
                             allpublication = response[0];
-                            genres = response[1];
-                            total = response[2];
+                            total = response[1];
                             result = allpublication.length;
                             num = 0;
 
                             for(i=0; i<allpublication.length; i++){
-                                genre = [];
-                                $.each(genres[i],function(key,val){
-                                    genrename = val.genre_name;
-                                    genre.push(genrename);
-                                });
+                                // console.log(JSON.parse(allpublication[i].genres));
+                                genres = allpublication[i].genres;
+                                genre = allpublication[i].genre;
+                               
+                               
+                                // if(genres[i].length>1){
+                                //     genre = [];
+                                //     $.each(genres[i],function(key,val){
 
-                                if(genres[i].length>1){
-                                    genress = '<div class="tooltip tooltip_data"><i class="fa-regular fa-circle-question"></i><ul class="tooltiptext"><li>'+genre+'</li></ul></div>';
-                                }else{
-                                    genress = genre;
-                                }
+                                //         genrename = val.genre_name;  
+                                //         gen = '<li>'+genrename+'</li>';
+                                //         genre.push(gen);
+                                //         genr = genre.toString().replaceAll(',', '');
+                                //     });
+                                //     genress = '<div class="tooltip tooltip_data all">'+genres[i].length+'genres<i class="fa-regular fa-circle-question all"></i><ul class="tooltiptext all">'+genr+'</ul></div>';
+                                // }else{
+                                //     genress = genr;
+                                // }
 
-                                if(allpublication[i].price == 0){
-                                    formattedprice = 'ASK';
-                                }else{
-                                    price = allpublication[i].price;
-                                    fprice = price.toLocaleString(undefined, { maximumFractionDigits: 2 });
-                                    formattedprice = '$'+fprice+'.00';
-                                }
+                                // if(allpublication[i].price == 0){
+                                //     formattedprice = 'ASK';
+                                // }else{
+                                //     price = allpublication[i].price;
+                                //     fprice = price.toLocaleString(undefined, { maximumFractionDigits: 2 });
+                                //     formattedprice = '$'+fprice+'.00';
+                                // }
 
-                                var html = '<tr id="pub'+allpublication[i].id+'"><td class="cpy_content"><div class="cpy_logo"><div class="cpy_logo_img"><img src="'+allpublication[i].image+'" class="img-fluid" alt=""></div><span><a href="'+allpublication[i].url+'">'+allpublication[i].title+'</a></span></div></td><td>'+genress+'</td><td>'+formattedprice+'</td><td>'+allpublication[i].turn_around_time+'</td><td>'+allpublication[i].domain_authority+'</td><td>'+allpublication[i].article_type.article_type+'</td><td>'+allpublication[i].country.country_name+'</td></tr>';
-                                data.push(html);
+                                // var html = '<tr id="pub'+allpublication[i].id+'"><td class="cpy_content all"><div class="cpy_logo all"><div class="cpy_logo_img all"><img src="'+allpublication[i].image+'" class="img-fluid" alt=""></div><span><a href="'+allpublication[i].url+'">'+allpublication[i].title+'</a></span></div></td><td>'+genress+'</td><td>'+formattedprice+'</td><td>'+allpublication[i].turn_around_time+'</td><td>'+allpublication[i].domain_authority+'</td><td>'+allpublication[i].article_type.article_type+'</td><td>'+allpublication[i].country.country_name+'</td></tr>';
+                                // data.push(html);
                                 
-                                num = num + 1;
-                                $('.publications_show').html('<span>Showing '+result+' of '+total+' publications</span>');
+                                // num = num + 1;
+                                // $('#show').html('<span>Showing '+result+' of '+total+' publications</span>');
                             }
                         }
-                        $('tbody').html(data);
+                        // $('#allpub').html(data);
                     }
                 });
             }
+
         });
         
     </script>
