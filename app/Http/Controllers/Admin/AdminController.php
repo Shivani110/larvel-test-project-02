@@ -314,7 +314,8 @@ class AdminController extends Controller
 
     public function importfile(Request $request){
         $request->validate([
-            'csv' => 'required',
+            'csv' => ' required|mimes:csv',
+           
         ]);
 
         if($request->hasFile('csv')){

@@ -217,8 +217,8 @@
                     <div class="row g-3 align-center">
                         <div class="col-lg-5">
                             <div class="form-group">
-                                <label class="form-label">Country/Religion</label>
-                                <span class="form-note">Please select country or religion for your publication.</span>
+                                <label class="form-label">Country/Region</label>
+                                <span class="form-note">Please select country or region for your publication.</span>
                             </div>
                         </div>
                         <div class="col-lg-7">

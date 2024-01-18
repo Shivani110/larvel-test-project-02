@@ -911,10 +911,7 @@ section.publication_wrapper .tab_wrapper button#scrollToTop i {
 	transition: all .3s linear;
 
 }
-.form-group.wrapper {
-    /* height: 96px; */
-    display: none;
-}
+
 
 .stat-high {
     min-height: 250px;

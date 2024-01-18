@@ -90,4 +90,5 @@ Route::group(['middleware'=>['publication']],function(){
     Route::get('/publications',[PublicationController::class,'allpublications']);
     Route::post('/publicationname',[PublicationController::class,'publicationName']);
     Route::get('/download',[PublicationController::class,'download']);
+    Route::post('/allpublications',[PublicationController::class,'reset']);
 });

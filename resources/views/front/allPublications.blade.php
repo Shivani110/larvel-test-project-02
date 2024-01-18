@@ -40,7 +40,7 @@
                     <div class="pricing_content">
                         <div class="pricing_text">
                             <h2>{{ $sitemeta[0]->title }}</h2>
-                            {{ $sitemeta[0]->description }}
+                            <?php print_r($sitemeta[0]->description); ?>
                         </div>
                         <div class="ques_btn">
                             <a href="{{ url('download') }}" class="btn" id="dwnld" role="button">Download PR Questionnaire</a>
@@ -84,19 +84,19 @@
                                                             <th class="text-left ">Publication</th>
                                                             <th>Genres</th>
                                                             <th>Price</th>
-                                                            <th class='d-flex'>DA
-                                                                <div class="tooltip"><i class="fa-regular fa-circle-question"></i>
-                                                                    <p class="tooltiptext">
-                                                                    <span>Domain authority</span><br>
-                                                                    Search engine ranking score (1-100)
-                                                                    </p>
-                                                                </div>
-                                                            </th>
                                                             <th>TAT
                                                                 <div class="tooltip"><i class="fa-regular fa-circle-question"></i>
                                                                     <p class="tooltiptext">
                                                                     <span>Time at arrival</span><br>
                                                                     Estimated time to deliver
+                                                                    </p>
+                                                                </div>
+                                                            </th>
+                                                            <th class='d-flex'>DA
+                                                                <div class="tooltip"><i class="fa-regular fa-circle-question"></i>
+                                                                    <p class="tooltiptext">
+                                                                    <span>Domain authority</span><br>
+                                                                    Search engine ranking score (1-100)
                                                                     </p>
                                                                 </div>
                                                             </th>
@@ -181,7 +181,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade show" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                                 <div class="publication_content">
                                     <div class="leftside_rang">
                                         <form>
@@ -199,6 +199,14 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="form-group wrapper">
+                                                <label for="formGroupExampleInput">Select regions</label>
+                                                <select multiple="" data-placeholder="Select regions" id="formGroupExampleInput1">
+                                                    @foreach($countries as $cnt)
+                                                    <option value="{{$cnt->id}}">{{ $cnt->country_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                             <div class="range_wreap">
                                                 <h3>Price range</h3>
                                                 <div id="slider-range"></div>
@@ -207,21 +215,13 @@
                                                         <span id="slider-range-value1">$0</span>
                                                     </div>
                                                     <div class="text-right caption">
-                                                        <span id="slider-range-value2">$56765</span>
+                                                        <span id="slider-range-value2">$30,000</span>
                                                     </div>
                                                 </div>
                                                 <div>
                                                     <input type="hidden" id="min_value" name="min_value" value="">
                                                     <input type="hidden" id="max_value" name="max_value" value="">
                                                 </div>
-                                            </div>
-                                            <div class="form-group wrapper">
-                                                <label for="formGroupExampleInput">Select regions</label>
-                                                <select multiple="" data-placeholder="Select regions" id="formGroupExampleInput1">
-                                                    @foreach($countries as $cnt)
-                                                    <option value="{{$cnt->id}}">{{ $cnt->country_name }}</option>
-                                                    @endforeach
-                                                </select>
                                             </div>
                                             <div class="select_wreap">
                                                 <h3>Select genres</h3>
@@ -243,7 +243,7 @@
                                             </div>
                                             <hr>
                                             <div class="ques_btn">
-                                                <a class="btn" role="button">Reset all filters</a>
+                                                <a class="btn" role="button" id="resetfilter">Reset all filters</a>
                                             </div>
                                         </form>
                                     </div>
@@ -259,21 +259,21 @@
                                                         <th class="text-left all">Publication</th>
                                                         <th>Genres</th>
                                                         <th>Price</th>
-                                                        <th>DA
-                                                        <div class="tooltip all"><i class="fa-regular fa-circle-question all"></i>
-                                                            <p class="tooltiptext all">
-                                                            <span>Domain authority</span><br>
-                                                            Search engine ranking score (1-100)
-                                                            </p>
-                                                        </div>
-                                                        </th>
                                                         <th>TAT
-                                                        <div class="tooltip all"><i class="fa-regular fa-circle-question all"></i>
-                                                            <p class="tooltiptext all">
-                                                            <span>Time at arrival</span><br>
-                                                            Estimated time to deliver
-                                                            </p>
-                                                        </div>
+                                                            <div class="tooltip all"><i class="fa-regular fa-circle-question all"></i>
+                                                                <p class="tooltiptext all">
+                                                                <span>Time at arrival</span><br>
+                                                                Estimated time to deliver
+                                                                </p>
+                                                            </div>
+                                                        </th>
+                                                        <th>DA
+                                                            <div class="tooltip all"><i class="fa-regular fa-circle-question all"></i>
+                                                                <p class="tooltiptext all">
+                                                                <span>Domain authority</span><br>
+                                                                Search engine ranking score (1-100)
+                                                                </p>
+                                                            </div>
                                                         </th>
                                                         <th>Article Type</th>
                                                         <th>Country/Region</th>
@@ -300,7 +300,6 @@
                                                                         <div class="tooltip tooltip_data all">{{ count($genres) }}genres<i class="fa-regular fa-circle-question all"></i>
                                                                             <ul class="tooltiptext all">
                                                                             <?php 
-                                                                                $genres = json_decode($data->genres);
                                                                                 foreach($genres as $gen){
                                                                                     $genre = (App\Models\Genre::where('id','=',$gen)->first()); ?>
                                                                                         <li>{{ $genre->genre_name }}</li>
@@ -507,7 +506,7 @@
             });
 
     // Set visual min and max values and also update value hidden form inputs
-            rangeSlider.noUiSlider.on("update", function (values, handle) {
+            rangeSlider.noUiSlider.on("change", function (values, handle) {
                 document.getElementById("slider-range-value1").innerHTML = values[0];
                 document.getElementById("slider-range-value2").innerHTML = values[1];
                 document.getElementsByName("min-value").value = moneyFormat.from(values[0]);
@@ -537,10 +536,16 @@
             $('.checkgenre').change(function(){
                 if(this.checked){
                     var genre = $(this).val(); 
-                    $('#genid'+genre).addClass('selected');
-                    $('.selected').css('background','rgba(146, 92, 3, 0.17)');
-                    $('.selected').css('color','#925C03');
+                    $('#genid'+genre).addClass('selected'+genre);
+                    $('.selected'+genre).css('background','rgba(146, 92, 3, 0.17)');
+                    $('.selected'+genre).css('color','#925C03');
                     genres.push(genre);
+                    publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
+                }else{
+                    var id = $(this).val();
+                    $('.selected'+id).css('color','#FFFFFF');
+                    $('.selected'+id).css('background','#7E7E7E');
+                    genres = [];
                     publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
                 }
             });
@@ -548,10 +553,16 @@
             $('.checkarticle').change(function(){
                 if(this.checked){
                     var article = $(this).val();
-                    $('#a_id'+article).addClass('checked');
-                    $('.checked').css('background','rgba(146, 92, 3, 0.17)');
-                    $('.checked').css('color','#925C03');
+                    $('#a_id'+article).addClass('checked'+article);
+                    $('.checked'+article).css('background','rgba(146, 92, 3, 0.17)');
+                    $('.checked'+article).css('color','#925C03');
                     articletype.push(article);
+                    publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
+                }else{
+                    var id = $(this).val();
+                    $('.checked'+id).css('color','#FFFFFF');
+                    $('.checked'+id).css('background','#7E7E7E');
+                    articletype = [];
                     publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
                 }
             });
@@ -592,45 +603,70 @@
                             num = 0;
 
                             for(i=0; i<allpublication.length; i++){
-                                // console.log(JSON.parse(allpublication[i].genres));
                                 genres = allpublication[i].genres;
                                 genre = allpublication[i].genre;
-                               
-                               
-                                // if(genres[i].length>1){
-                                //     genre = [];
-                                //     $.each(genres[i],function(key,val){
+                                genobj = JSON.parse(genres);
 
-                                //         genrename = val.genre_name;  
-                                //         gen = '<li>'+genrename+'</li>';
-                                //         genre.push(gen);
-                                //         genr = genre.toString().replaceAll(',', '');
-                                //     });
-                                //     genress = '<div class="tooltip tooltip_data all">'+genres[i].length+'genres<i class="fa-regular fa-circle-question all"></i><ul class="tooltiptext all">'+genr+'</ul></div>';
-                                // }else{
-                                //     genress = genr;
-                                // }
-
-                                // if(allpublication[i].price == 0){
-                                //     formattedprice = 'ASK';
-                                // }else{
-                                //     price = allpublication[i].price;
-                                //     fprice = price.toLocaleString(undefined, { maximumFractionDigits: 2 });
-                                //     formattedprice = '$'+fprice+'.00';
-                                // }
-
-                                // var html = '<tr id="pub'+allpublication[i].id+'"><td class="cpy_content all"><div class="cpy_logo all"><div class="cpy_logo_img all"><img src="'+allpublication[i].image+'" class="img-fluid" alt=""></div><span><a href="'+allpublication[i].url+'">'+allpublication[i].title+'</a></span></div></td><td>'+genress+'</td><td>'+formattedprice+'</td><td>'+allpublication[i].turn_around_time+'</td><td>'+allpublication[i].domain_authority+'</td><td>'+allpublication[i].article_type.article_type+'</td><td>'+allpublication[i].country.country_name+'</td></tr>';
-                                // data.push(html);
+                                if(genobj.length>1){
+                                    genredata = [];
+                                    $.each(genre, function(key,val){
+                                        genreid = val.id;
+                                        if(genres.includes(genreid)){
+                                            genrename = val.genre_name; 
+                                            gen = '<li>'+genrename+'</li>';
+                                            genredata.push(gen);
+                                        }
+                                    });
+                                    genr = genredata.toString().replaceAll(',', '');
+                                    genress = '<div class="tooltip tooltip_data all">'+genobj.length+'genres<i class="fa-regular fa-circle-question all"></i><ul class="tooltiptext all">'+genr+'</ul></div>';
+                                }else{
+                                    gendata = '';
+                                    $.each(genre, function(key,val){
+                                        genreid = val.id;
+                                        if(genres.includes(genreid)){
+                                            genrename = val.genre_name; 
+                                            gendata = genrename;
+                                        }
+                                    });
+                                    genr = gendata;
+                                    genress = genr;
+                                }
                                 
-                                // num = num + 1;
-                                // $('#show').html('<span>Showing '+result+' of '+total+' publications</span>');
+                                if(allpublication[i].price == 0){
+                                    formattedprice = 'ASK';
+                                }else{
+                                    price = allpublication[i].price;
+                                    fprice = price.toLocaleString(undefined, { maximumFractionDigits: 2 });
+                                    formattedprice = '$'+fprice+'.00';
+                                }
+
+                                var html = '<tr id="pub'+allpublication[i].id+'"><td class="cpy_content all"><div class="cpy_logo all"><div class="cpy_logo_img all"><img src="'+allpublication[i].image+'" class="img-fluid" alt=""></div><span><a href="'+allpublication[i].url+'">'+allpublication[i].title+'</a></span></div></td><td>'+genress+'</td><td>'+formattedprice+'</td><td>'+allpublication[i].turn_around_time+'</td><td>'+allpublication[i].domain_authority+'</td><td>'+allpublication[i].article_type.article_type+'</td><td>'+allpublication[i].country.country_name+'</td></tr>';
+                                data.push(html);
+                                
+                                num = num + 1;
+                                $('#show').html('<span>Showing '+result+' of '+total+' publications</span>');
                             }
                         }
-                        // $('#allpub').html(data);
+                        $('#allpub').html(data);
                     }
                 });
             }
 
+
+            $('#resetfilter').click(function(){
+                var data={
+                    _token:"{{ csrf_token() }}"
+                }
+                $.ajax({
+                    url:"{{ url('allpublications') }}",
+                    type: "POST",
+                    data: data,
+                    dataType: "JSON",
+                    success:function(response){
+                        console.log(response);
+                    }
+                });
+            });
         });
         
     </script>

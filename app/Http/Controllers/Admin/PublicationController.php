@@ -36,10 +36,8 @@ class PublicationController extends Controller
     
     public function publicationName(Request $request){
         $query = Publications::with('articleType','country','genre');
-
-
+        
         $publicationName = $request->name;
-
         if($publicationName !== null){
            $query->where('title','like',$publicationName.'%');
         }
@@ -89,18 +87,6 @@ class PublicationController extends Controller
         
         $results = $query->get();
        
-        // return $results;
-        // die();
-
-        // $publication = [];
-        
-        // foreach($results as $data){
-        //     $genres = json_decode($data->genres);
-        //     // $genreS = Genre::whereIn('id', $genres)->get();
-        //     $genreS = Genre::findMany($genres);
-        //     array_push($publication,$genreS);       
-        // }
-
         $publications = Publications::all();
         $total = count($publications);
 
@@ -116,5 +102,15 @@ class PublicationController extends Controller
 
         $filename = time().'.'.$extension;
         return response()->download($path,$filename);
+    }
+
+    public function reset(Request $request){
+        $publications = Publications::all();
+        $genres = Genre::all();
+        $countries = Country::all();
+        $articles = ArticleType::all();
+        $sitemeta = SiteMeta::all();
+
+        return response()->json([$publications,$genres,$countries,$articles,$sitemeta]);
     }
 }
