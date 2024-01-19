@@ -84,9 +84,9 @@
 
 <script>
     $(document).ready(function(){
+        var i = parseInt({{ $i }});
         $('#myform').submit(function(e){
             e.preventDefault();
-            var i = parseInt({{ $i }});
             var data={
                 id: $('#c_id').val(),
                 categoryname: $('#categoryname').val(),
@@ -115,6 +115,7 @@
                         var row = $('<tr class="tb-tnx-item" id="category'+response[0].id+'"><td class="tb-tnx-id"><a href="#"><span>'+i+'</span></a></td><td class="tb-tnx-info c-name'+response[0].id+'"><div class="tb-tnx-desc"><input type="text" data-id="'+response[0].id+'" class="" value="'+response[0].category_name+'" disabled="" style="border: none; background: transparent;"></div></td><td><div class="dropdown drop"><a class="text-soft=" dropdown-toggle="" btn="" btn-icon="" btn-trigger="" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em><div class="dropdown-menu dropdown-menu-end dropdown-menu-xs"><ul class="link-list-plain"><li><a data-id="'+response[0].id+'" data-name="'+response[0].category_name+'" class="edit-category">Edit</a></li><li><a data-id="'+response[0].id+'" class="remove-category">Remove</a></li></ul></div></div></td></tr>');
                         $('tbody').append(row);
                         i = i+1;
+
                         var targetDiv = $("#category"+response[0].id);
                         $('html, body').animate({
                             scrollTop: targetDiv.offset().top

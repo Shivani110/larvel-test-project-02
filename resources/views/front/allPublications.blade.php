@@ -181,10 +181,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                                 <div class="publication_content">
                                     <div class="leftside_rang">
-                                        <form>
+                                        <div>
+                                            <div class="ques_btn">
+                                                <a class="btn" role="button" id="resetfilter" style="display:none">Reset all filters</a>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <form id="myform">
                                             <div class="form-group">
                                                 <label for="formGroupExampleInput">Publication name</label>
                                                 <input type="text" class="form-control" id="formGroupExampleInput">
@@ -242,9 +248,6 @@
                                                 </div>
                                             </div>
                                             <hr>
-                                            <div class="ques_btn">
-                                                <a class="btn" role="button" id="resetfilter">Reset all filters</a>
-                                            </div>
                                         </form>
                                     </div>
                                     <div class="rightside_publication">
@@ -516,6 +519,7 @@
                 max = $('#slider-range-value2').html().replace('$','');
                 min_price = min.replace(',','');
                 max_price = max.replace(',','');
+                $('#resetfilter').show();
                 minprice = min_price;
                 maxprice = max_price;
                 publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
@@ -523,19 +527,22 @@
 
             $('#exampleFormControlSelect1').change(function(){
                 var price = $(this).val();
+                $('#resetfilter').show();
                 prices = price;
                 publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
             });
             
             $('#formGroupExampleInput1').change(function(){
                 var country = $(this).val();
+                $('#resetfilter').show();
                 countries = country;
                 publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
             });
 
             $('.checkgenre').change(function(){
                 if(this.checked){
-                    var genre = $(this).val(); 
+                    var genre = $(this).val();
+                    $('#resetfilter').show(); 
                     $('#genid'+genre).addClass('selected'+genre);
                     $('.selected'+genre).css('background','rgba(146, 92, 3, 0.17)');
                     $('.selected'+genre).css('color','#925C03');
@@ -553,6 +560,8 @@
             $('.checkarticle').change(function(){
                 if(this.checked){
                     var article = $(this).val();
+                    $('#resetfilter').show();
+
                     $('#a_id'+article).addClass('checked'+article);
                     $('.checked'+article).css('background','rgba(146, 92, 3, 0.17)');
                     $('.checked'+article).css('color','#925C03');
@@ -569,6 +578,7 @@
 
             $('#formGroupExampleInput').keyup(function(){
                 var name = $(this).val();
+                $('#resetfilter').show();
                 publicationname = name;
                 publication(prices,countries,genres,articletype,publicationname,minprice,maxprice);
             });
@@ -651,24 +661,29 @@
                     }
                 });
             }
+        });
 
+        
 
-            $('#resetfilter').click(function(){
-                var data={
-                    _token:"{{ csrf_token() }}"
-                }
-                $.ajax({
-                    url:"{{ url('allpublications') }}",
-                    type: "POST",
-                    data: data,
-                    dataType: "JSON",
-                    success:function(response){
-                        console.log(response);
-                    }
-                });
-            });
+        $('#resetfilter').click(function(){
+            localStorage.setItem("publication","true");
+            location.reload();
         });
         
+        $(document).ready(function(){
+            var publication = localStorage.getItem("publication");
+
+            if(publication === "true"){
+                $('#pills-most-popular').removeClass('show active');
+                $('#pills-home').addClass('show active');
+
+                $('#pills-most-popular-tab').removeClass('active');
+                $('#pills-home-tab').addClass('active');
+            }
+
+            localStorage.removeItem("publication");
+        });
+
     </script>
 </body>
 </html>

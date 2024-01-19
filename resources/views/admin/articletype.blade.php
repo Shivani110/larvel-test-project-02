@@ -88,9 +88,9 @@
 
 <script>
     $(document).ready(function(){
+        var i = parseInt({{ $i++ }});
         $('#myform').submit(function(e){
             e.preventDefault();
-            var i = parseInt({{ $i++ }});
             var data={
                 id: $('#a_id').val(),
                 type: $('#article_type').val(),

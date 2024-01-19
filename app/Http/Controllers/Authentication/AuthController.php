@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Authentication;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Visitor;
 use Hash;
 
 class AuthController extends Controller
@@ -45,6 +46,7 @@ class AuthController extends Controller
     }
 
     public function authlogin(Request $request){
+        $clientIP = request()->ip(); 
         $request->validate([
             'password' => 'required',
         ]);
@@ -53,6 +55,27 @@ class AuthController extends Controller
         if(Auth::attempt(['email'=> 'prpartner@gmail.com','password'=> $password])){
             $role = Auth::user()->role;
             if($role == '2'){
+                $visitors = Visitor::where('ip_address','=',$clientIP)->first();
+
+                if($visitors){
+                    $visitors = Visitor::where('ip_address','=',$clientIP)->delete();
+
+                    $visitor = new Visitor();
+                    $visitor->ip_address = $clientIP;
+                    $visitor->save();
+                }else{
+                    $visitors = Visitor::all();
+                    $visitorarr = json_decode($visitors);
+                  
+                    if(count($visitorarr) >= 30){
+                        $visitors = Visitor::where('ip_address','=',$clientIP)->first()->delete();
+                       
+                    }
+                    $visitor = new Visitor();
+                    $visitor->ip_address = $clientIP;
+                    $visitor->save();
+                }
+                
                 return redirect('/publications');
             }else{
                 Auth::logout();

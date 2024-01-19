@@ -105,12 +105,8 @@ class PublicationController extends Controller
     }
 
     public function reset(Request $request){
-        $publications = Publications::all();
-        $genres = Genre::all();
-        $countries = Country::all();
-        $articles = ArticleType::all();
-        $sitemeta = SiteMeta::all();
+        $publications = Publications::with('articleType','country','genre')->get();
 
-        return response()->json([$publications,$genres,$countries,$articles,$sitemeta]);
+        return response()->json($publications);
     }
 }
