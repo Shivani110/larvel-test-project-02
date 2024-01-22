@@ -84,6 +84,10 @@ Route::group(['middleware'=>['admin']],function(){
     Route::get('/admin-dashboard/sitemeta',[AdminController::class,'siteMeta']);
     Route::post('/admin-dashboard/createsite',[AdminController::class,'createSiteMeta']);
     Route::post('/admin-dashboard/popular',[AdminController::class,'updateMostpopular']);
+    Route::get('/admin-dashboard/loginactivity',[AdminController::class,'loginactivity']);
+    Route::get('/admin-dashboard/userprofile',[AdminController::class,'profile']);
+    Route::get('/admin-dashboard/changeprofile',[AdminController::class,'changeprofile']);
+    Route::post('/admin-dashboard/updateprofile',[AdminController::class,'updateProfile']);
 });
 
 Route::group(['middleware'=>['publication']],function(){

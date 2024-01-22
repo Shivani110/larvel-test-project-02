@@ -52,7 +52,7 @@
                                     <strong>{{ $message }}</strong>
                                 </div>
                                 @endif
-                                <form action="{{ url('/admin-signin') }}" method="POST" class="form-validate is-alter">
+                                <form action="{{ url('/admin-signin') }}" method="POST" class="form-validate is-alter" id="myform">
                                 @csrf
                                     <div class="form-group">
                                         <div class="form-label-group">
@@ -74,17 +74,16 @@
                                             <input type="password" class="form-control form-control-lg" required name="password" id="password" placeholder="Enter your password">
                                         </div>
                                     </div><!-- .form-group -->
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
                                         @if ($errors->has('g-recaptcha-response'))
                                             <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
                                         @endif
-                                    </div>  
+                                    </div>   -->
                                     <div class="form-group">
-                                        <input type="submit" name="submit" value="Sign in" class="btn btn-lg btn-primary btn-block">
+                                        <button class="btn btn-lg btn-primary btn-block g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}" data-callback="onSubmit">Sign In</button>
                                     </div>
                                 </form><!-- form -->
-                                </div>
                             </div><!-- .nk-block -->
                         </div><!-- .nk-split-content -->
                     </div><!-- .nk-split -->
@@ -96,6 +95,11 @@
         <!-- main @e -->
     </div>
     <!-- app-root @e -->
+    <script>
+        function onSubmit(token) {
+            document.getElementById("myform").submit();
+        }
+    </script>
     <!-- JavaScript -->
     <script src="{{ asset('/assets/js/bundle.js?ver=3.1.2') }}"></script>
     <script src="{{ asset('/assets/js/scripts.js?ver=3.1.2') }}"></script>

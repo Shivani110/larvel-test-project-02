@@ -16,6 +16,7 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
         $recaptcha = $_POST['g-recaptcha-response'];
         $secret_key = env('RECAPTCHA_SECRET_KEY');
         $url = 'https://www.google.com/recaptcha/api/siteverify?secret='.$secret_key.'&response='.$recaptcha;

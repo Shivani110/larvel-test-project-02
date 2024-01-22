@@ -18,6 +18,7 @@ use App\Models\PressRelease;
 use App\Models\ServicesCategory;
 use App\Models\OtherService;
 use App\Models\SiteMeta;
+use App\Models\Visitor;
 use Hash;
 
 class AdminController extends Controller
@@ -817,4 +818,33 @@ class AdminController extends Controller
        return response()->json($publication);
     }
 
+    public function loginactivity(){
+        $visitor = Visitor::all();
+        return view('admin.loginactivity',compact('visitor'));
+    }
+
+    public function profile(){
+        return view('admin.userprofile');
+    }
+
+    public function changeprofile(){
+        return view('admin.updateprofile');
+    }
+
+    public function updateProfile(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'phone' => 'required|digits:10',
+        ]);
+
+        $name = $request->name;
+        $phoneNumber = $request->phone;
+
+        $user = User::where('email','=',Auth::user()->email)->first();
+        $user->name = $name;
+        $user->phone_number = $phoneNumber;
+        $user->update();
+
+        return back()->with("success","Changes Saved...");
+    }
 }
